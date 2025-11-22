@@ -1,9 +1,9 @@
 <script setup>
-import PlayGame from "../components/PlayGame.vue";
+import JumboTron from "../components/JumboTron.vue";
 </script>
 
 <template>
   <main>
-    <PlayGame />
+    <JumboTron />
   </main>
 </template>

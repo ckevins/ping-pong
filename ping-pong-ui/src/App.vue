@@ -1,19 +1,15 @@
-<script setup>
-import { RouterLink, RouterView } from "vue-router";
-</script>
-
 <template>
   <div id="app">
-    <!-- <nav>
-      <RouterLink to="/">Home</RouterLink>
-    </nav> -->
     <RouterView />
   </div>
 </template>
 
+<script setup>
+import { RouterView } from "vue-router";
+</script>
 <style scoped>
 body, #app {
-  background-color: rgb(38, 38, 38);
+  background-color: rgb(0, 3, 29);
   min-height: 100vh;
 }
 
