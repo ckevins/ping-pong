@@ -47,36 +47,34 @@ const props = defineProps<{
 const game = ref<GameRecord>(props.newGameData);
 
 const numberOfPointsPlayed = computed((): number => {
-  const points = game.value?.points;
-  return points?.length || 0;
+  return game.value.points.length;
 })
 
 // Note that the currentScore will point to the previous point played
 const currentScore = computed((): Point | undefined => {
-  const points = game.value?.points;
-  if (!points || numberOfPointsPlayed.value === 0) return undefined;
-  return points[numberOfPointsPlayed.value - 1];
+  return game.value.points[numberOfPointsPlayed.value - 1];
 })
 
 const currentPoint = computed((): Point => {
-  const playerOneId = game.value?.playerOne.id || -1;
-  const playerTwoId = game.value?.playerTwo.id || -1;
+  const playerOneId = game.value.playerOne.id;
+  const playerTwoId = game.value.playerTwo.id;
+  const valueTbd = -1;
   return {
     servingPlayer: Math.floor(numberOfPointsPlayed.value / 5) % 2 == 0 ? playerOneId : playerTwoId,
-    pointWinner: -1,
     pointNumber: numberOfPointsPlayed.value + 1,
-    playerOneScore: -1,
-    playerTwoScore: -1,
+    pointWinner: valueTbd,
+    playerOneScore: valueTbd,
+    playerTwoScore: valueTbd,
   }
 })
 
 const isDeuce = computed((): boolean => {
   if (!currentScore.value || isFinalScore.value) return false;
-  return currentScore.value?.playerOneScore >= 20 && currentScore.value?.playerTwoScore >= 20;
+  return currentScore.value.playerOneScore >= 20 && currentScore.value.playerTwoScore >= 20;
 });
 
 function updateScore (pointWinner: Player) {
-  if (!game.value || isFinalScore.value) return;
+  if (isFinalScore.value) return;
 
   const pointToAdd: Point = {
     ...currentPoint.value,
@@ -89,42 +87,36 @@ function updateScore (pointWinner: Player) {
 }
 
 function undoUpdateScore () {
-  if(!game.value) return;
   game.value.points.pop();
 }
 
 function getLeadScore (currentScore: Point) {
   const leadScore: number = Math.max(currentScore.playerOneScore, currentScore.playerTwoScore);
-  const leadPlayer = currentScore.playerOneScore === leadScore ? game.value!.playerOne : game.value!.playerTwo;
-  return {
-    leadScore,
-    leadPlayer
-  }
+  const leadPlayer = currentScore.playerOneScore === leadScore ? game.value.playerOne : game.value.playerTwo;
+  return { leadScore, leadPlayer }
 }
 
 function getTrailingScore (currentScore: Point) {
   const trailingScore = Math.min(currentScore.playerOneScore, currentScore.playerTwoScore);
   const trailingPlayer = currentScore.playerOneScore === trailingScore ? game.value!.playerOne : game.value!.playerTwo;
-  return {
-    trailingScore,
-    trailingPlayer
-  }
+  return { trailingScore, trailingPlayer }
 }
 
-function updateWinnerInGameRecord (leadPlayer: Player, leadPlayerScore: number, trailingPlayer: Player, trailingPlayerScore: number) {
-  if (!game.value) return;
+function updateWinnerInGameRecord (currentScore: Point) {
+  const { leadScore, leadPlayer } = getLeadScore(currentScore);
+  const { trailingScore, trailingPlayer }= getTrailingScore(currentScore);
+
   game.value = {
     ...game.value,
     winner: leadPlayer.id,
     loser: trailingPlayer.id,
-    finalWinningScore: leadPlayerScore,
-    finalLosingScore: trailingPlayerScore
+    finalWinningScore: leadScore,
+    finalLosingScore: trailingScore
   }
 }
 
 function undoUpdateWinnerInGameRecord () {
-  if (!game.value) return;
-    game.value = {
+  game.value = {
     ...game.value,
     winner: undefined,
     loser: undefined,
@@ -134,43 +126,40 @@ function undoUpdateWinnerInGameRecord () {
 }
 
 const isFinalScore = computed((): boolean => {
-  if (!game.value || !currentScore.value) return false;
+  if (!currentScore.value) return false;
+
   const { leadScore, leadPlayer } = getLeadScore(currentScore.value);
   const { trailingScore, trailingPlayer }= getTrailingScore(currentScore.value);
   
   if (leadScore < 21) return false;
   if (leadScore >= 21 && leadScore - trailingScore >= 2) {
-    updateWinnerInGameRecord(leadPlayer, leadScore, trailingPlayer, trailingScore)
+    updateWinnerInGameRecord(currentScore.value)
     return true;
   }
   return false;
 })
 
 function getPlayerScoreClass (player: Player): string {
-  if (!game.value) return '';
-  if (!isFinalScore.value && !isDeuce.value) return '';
-  if (isDeuce.value) return 'deuce';
-  return (isFinalScore && game.value.winner === player.id) ? 'winner' : 'loser';
+  if (isDeuce.value) return'deuce';
+  if (isFinalScore.value && game.value.winner === player.id) return 'winner'
+  if (isFinalScore.value && game.value.winner !== player.id) return 'loser';
+  return ''
 }
 
 function handleKeyPress (event: any) {
   if (event.key === 'ArrowLeft') {
-    if (!game.value) return;
     updateScore(game.value.playerOne);
   }
 
   if (event.key === 'ArrowRight') {
-    if (!game.value) return;
     updateScore(game.value.playerTwo);
   }
 
   if (event.key === 'Backspace') {
-    if (!game.value) return;
     undoUpdateScore();
   }
 
   if (event.key === '`') {
-    if (!game.value) return;
     undoUpdateWinnerInGameRecord();
     game.value.points = [];
   }
