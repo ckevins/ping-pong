@@ -4,3 +4,4 @@ export { default as PaddleIcon } from "./PaddleIcon.vue";
 export { default as PlayerScore } from "./PlayerScore.vue";
 export { default as UndoIcon } from "./UndoIcon.vue";
 export { default as GameSetup } from "./GameSetup.vue"
+export { default as GameLineChart } from "./GameLineChart.vue";

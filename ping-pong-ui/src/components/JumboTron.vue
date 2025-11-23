@@ -1,44 +1,37 @@
 <template>
-  <section class="jumbo-tron text-center">
-    <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
-    <div class="score-section">
-      <PlayerScore
-      :class="getPlayerScoreClass(game.playerOne)"
-      :player="game.playerOne"
-      :score="currentScore?.playerOneScore || 0"
-      :is-serving="currentPoint.servingPlayer === 1"
-      :is-final-score="isFinalScore"
-      :has-advantage="hasAdvantage(game.playerOne)"
-      :player-position="1"
-      @update-score="updateScore(game.playerOne)"
-      />
-      <div class="divider-section">
-        <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
-        <div v-if="isDeuce" class="deuce deuce-text-container">
-          <p class="deuce-text" id="deuce-text-1">Deuce!</p>
-          <p class="deuce-text" id="deuce-text-2">Deuce!</p>
+  <section>
+    <section class="jumbo-tron-container">
+      <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
+      <div id="jumbo-tron">
+        <PlayerScore :class="getPlayerScoreClass(game.playerOne)" :player="game.playerOne"
+          :score="currentScore?.playerOneScore || 0" :is-serving="currentPoint.servingPlayer === 1"
+          :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerOne)" :player-position="1"
+          @update-score="updateScore(game.playerOne)" />
+        <div class="divider-section">
+          <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
+          <div v-if="isDeuce" class="deuce deuce-text-container">
+            <p class="deuce-text" id="deuce-text-1">Deuce!</p>
+            <p class="deuce-text" id="deuce-text-2">Deuce!</p>
+          </div>
         </div>
+        <PlayerScore :class="getPlayerScoreClass(game.playerTwo)" :player="game.playerTwo"
+          :score="currentScore?.playerTwoScore || 0" :is-serving="currentPoint.servingPlayer === 2"
+          :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerTwo)" :player-position="2"
+          @update-score="updateScore(game.playerTwo)" />
       </div>
-      <PlayerScore
-      :class="getPlayerScoreClass(game.playerTwo)"
-      :player="game.playerTwo"
-      :score="currentScore?.playerTwoScore || 0"
-      :is-serving="currentPoint.servingPlayer === 2"
-      :is-final-score="isFinalScore"
-      :has-advantage="hasAdvantage(game.playerTwo)"
-      :player-position="2"
-      @update-score="updateScore(game.playerTwo)"
-      />
-    </div>
-    <button id="undo" @click="undoUpdateScore()">
-      <UndoIcon />
-    </button>
+      <button id="undo" @click="undoUpdateScore()">
+        <UndoIcon />
+      </button>
+    </section>
+    <section class="chart-container">
+      <GameLineChart :game="game" />
+    </section>
   </section>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import { PlayerScore, DividerLine } from ".";
+import { PlayerScore, DividerLine, GameLineChart } from ".";
 import UndoIcon from "./UndoIcon.vue";
 import type { Player } from "../types/player";
 import type { GameRecord } from "../types/game";
@@ -71,7 +64,7 @@ const currentPoint = computed((): Point => {
   }
 })
 
-function getServingPlayer (): playerId {
+function getServingPlayer(): playerId {
   if (isDeuce.value) {
     // when it is deuce, switch server every 2 points
     return Math.floor(numberOfPointsPlayed.value / 2) % 2 == 0 ? game.value.playerOne.id : game.value.playerTwo.id;
@@ -87,17 +80,17 @@ const isDeuce = computed((): boolean => {
   return currentScore.value.playerOneScore >= 20 && currentScore.value.playerTwoScore >= 20;
 });
 
-function hasAdvantage (player: Player): boolean {
+function hasAdvantage(player: Player): boolean {
   if (
-    !isDeuce.value 
-    || !currentScore.value 
+    !isDeuce.value
+    || !currentScore.value
     || currentScore.value?.playerOneScore === currentScore.value?.playerTwoScore
   ) return false;
   const { leadPlayer } = getLeadScore(currentScore.value);
   return leadPlayer.id === player.id;
 }
 
-function updateScore (pointWinner: Player) {
+function updateScore(pointWinner: Player) {
   if (isFinalScore.value) return;
 
   const pointToAdd: Point = {
@@ -110,26 +103,26 @@ function updateScore (pointWinner: Player) {
   game.value.points.push(pointToAdd);
 }
 
-function undoUpdateScore () {
+function undoUpdateScore() {
   undoUpdateWinnerInGameRecord();
   game.value.points.pop();
 }
 
-function getLeadScore (currentScore: Point) {
+function getLeadScore(currentScore: Point) {
   const leadScore: number = Math.max(currentScore.playerOneScore, currentScore.playerTwoScore);
   const leadPlayer = currentScore.playerOneScore === leadScore ? game.value.playerOne : game.value.playerTwo;
   return { leadScore, leadPlayer }
 }
 
-function getTrailingScore (currentScore: Point) {
+function getTrailingScore(currentScore: Point) {
   const trailingScore = Math.min(currentScore.playerOneScore, currentScore.playerTwoScore);
   const trailingPlayer = currentScore.playerOneScore === trailingScore ? game.value!.playerOne : game.value!.playerTwo;
   return { trailingScore, trailingPlayer }
 }
 
-function updateWinnerInGameRecord (currentScore: Point) {
+function updateWinnerInGameRecord(currentScore: Point) {
   const { leadScore, leadPlayer } = getLeadScore(currentScore);
-  const { trailingScore, trailingPlayer }= getTrailingScore(currentScore);
+  const { trailingScore, trailingPlayer } = getTrailingScore(currentScore);
 
   game.value = {
     ...game.value,
@@ -140,7 +133,7 @@ function updateWinnerInGameRecord (currentScore: Point) {
   }
 }
 
-function undoUpdateWinnerInGameRecord () {
+function undoUpdateWinnerInGameRecord() {
   game.value = {
     ...game.value,
     winner: undefined,
@@ -154,8 +147,8 @@ const isFinalScore = computed((): boolean => {
   if (!currentScore.value) return false;
 
   const { leadScore } = getLeadScore(currentScore.value);
-  const { trailingScore }= getTrailingScore(currentScore.value);
-  
+  const { trailingScore } = getTrailingScore(currentScore.value);
+
   if (leadScore >= 21 && leadScore - trailingScore >= 2) return true;
   return false;
 })
@@ -166,19 +159,21 @@ watch(isFinalScore, (newValue) => {
   }
 })
 
-function getPlayerScoreClass (player: Player): string {
-  if (isDeuce.value) return'deuce';
+function getPlayerScoreClass(player: Player): string {
+  if (isDeuce.value) return 'deuce';
   if (isFinalScore.value && game.value.winner === player.id) return 'winner'
   if (isFinalScore.value && game.value.winner !== player.id) return 'loser';
   return ''
 }
 
-function handleKeyPress (event: any) {
+function handleKeyPress(event: any) {
   switch (event.key) {
     case 'ArrowLeft':
+    case '[':
       updateScore(game.value.playerOne);
       break;
     case 'ArrowRight':
+    case ']':
       updateScore(game.value.playerTwo);
       break;
     case 'Backspace':
@@ -201,11 +196,26 @@ onUnmounted(() => {
 </script>
 
 <style>
-.score-section {
+.jumbo-tron-container, .chart-container {
+  text-align: center;
+  height: calc(50vh - 20px);
+}
+
+.jumbo-tron-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  font-family: "Doto";
+}
+
+
+#jumbo-tron {
   display: flex;
   justify-content: space-between;
   position: relative;
-  height: 400px;
+  height: 280px;
+  width: 100%;
 }
 
 .divider-section {
@@ -254,11 +264,11 @@ onUnmounted(() => {
 }
 
 .winner {
-  color: green;
+  color: rgb(85, 255, 85);
 }
 
 .loser {
-  color: gray;
+  color: rgb(167, 167, 167);
 }
 
 .hide-element {

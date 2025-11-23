@@ -16,7 +16,7 @@ body, #app {
 #app {
   width: 100%;
   margin: auto;
-  padding: 100px;
+  padding: 20px;
   color: white;
 }
 </style>

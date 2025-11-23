@@ -1,5 +1,5 @@
 <template>
-  <div class="text-center player-score">
+  <div class="text-center jumbo-tron__half">
     <section class="player-name-section">
       <p id="player-name">{{ props.player.name }}
         <span class="win-loss-record">({{ props.player.wins }} - {{ props.player.losses }})</span>
@@ -10,9 +10,9 @@
       </div>
     </section>
     <div>
-      <div id="jumbo-tron">{{ props.score }}</div>
+      <p id="jumbo-tron__score">{{ props.score }}</p>
     </div>
-    <button id="jumbo-tron-button" @click="emit('update-score')">+</button>
+    <div role="button" class="jumbo-tron__button" @click="emit('update-score')">+</div>
   </div>
 </template>
 
@@ -33,22 +33,27 @@ const emit = defineEmits(["update-score"]);
 </script>
 
 <style scoped>
-.player-score {
+.jumbo-tron__half {
   flex-grow: 1;
   max-width: 48%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .player-name-section {
   position: relative;
+  width: 100%;
 }
 
 .win-loss-record {
-  font-size: 1rem;
+  font-size: 20px;
   padding-left: 5px;
 }
 
 #player-name {
-  font-size: 2rem;
+  font-size: 30px;
 }
 
 .serving-indicator {
@@ -69,12 +74,18 @@ const emit = defineEmits(["update-score"]);
   left: 0;
 }
 
-#jumbo-tron {
-  font-size: 10rem;
+#jumbo-tron__score {
+  font-size: 120px;
+  margin: 0;
 }
 
-#jumbo-tron-button {
-  font-size: 5rem;
+.jumbo-tron__button {
+  width: 40px;
+  font-size: 40px;
+}
+
+.jumbo-tron__button:hover {
+  color: rgb(13, 76, 178);
 }
 
 .invisible {
