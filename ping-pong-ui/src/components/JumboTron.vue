@@ -126,10 +126,11 @@ function undoUpdateWinnerInGameRecord () {
 }
 
 const isFinalScore = computed((): boolean => {
+  console.log('is this the culprit?');
   if (!currentScore.value) return false;
 
-  const { leadScore, leadPlayer } = getLeadScore(currentScore.value);
-  const { trailingScore, trailingPlayer }= getTrailingScore(currentScore.value);
+  const { leadScore } = getLeadScore(currentScore.value);
+  const { trailingScore }= getTrailingScore(currentScore.value);
   
   if (leadScore < 21) return false;
   if (leadScore >= 21 && leadScore - trailingScore >= 2) {
