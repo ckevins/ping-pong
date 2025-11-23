@@ -12,9 +12,9 @@
       />
       <div class="divider-section">
         <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
-        <div v-if="isDeuce" class="deuce">
-          <div class="deuce-text">Deuce</div>
-          <div class="deuce-text">Deuce</div>
+        <div v-if="isDeuce" class="deuce deuce-text-container">
+          <p class="deuce-text" id="deuce-text-1">Deuce!</p>
+          <p class="deuce-text" id="deuce-text-2">Deuce!</p>
         </div>
       </div>
       <PlayerScore
@@ -87,6 +87,7 @@ function updateScore (pointWinner: Player) {
 }
 
 function undoUpdateScore () {
+  undoUpdateWinnerInGameRecord();
   game.value.points.pop();
 }
 
@@ -135,7 +136,7 @@ const isFinalScore = computed((): boolean => {
   return false;
 })
 
-watch(isFinalScore, (newValue, oldValue) => {
+watch(isFinalScore, (newValue) => {
   if (newValue === true) {
     updateWinnerInGameRecord(currentScore.value!);
   }
@@ -196,19 +197,31 @@ onUnmounted(() => {
   color: orange;
 }
 
+.deuce-text-container {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+}
+
 .deuce-text {
   position: absolute;
   top: 50%;
   left: 50%;
-  font-weight: bold;
+  padding-bottom: 30px;
 }
 
-.deuce-text:nth-child(1) {
-  transform: rotate(90deg);
+#deuce-text-1 {
+  transform: translate(-50%, -50%) rotate(90deg);
 }
 
-.deuce-text:nth-child(2) {
-  transform: translateX(-50px) rotate(270deg);
+#deuce-text-2 {
+  transform: translate(-50%, -50%) rotate(270deg);
 }
 
 .winner {
