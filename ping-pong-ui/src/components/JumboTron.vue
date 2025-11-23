@@ -1,7 +1,7 @@
 <template>
   <section class="jumbo-tron text-center">
     <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
-    <div class="flex justify-between score-section">
+    <div class="score-section">
       <PlayerScore
       :class="getPlayerScoreClass(game.playerOne)"
       :player="game.playerOne"
@@ -30,7 +30,7 @@
       @update-score="updateScore(game.playerTwo)"
       />
     </div>
-    <button id="undo" class="mt-5" @click="undoUpdateScore()">
+    <button id="undo" @click="undoUpdateScore()">
       <UndoIcon />
     </button>
   </section>
@@ -202,6 +202,8 @@ onUnmounted(() => {
 
 <style>
 .score-section {
+  display: flex;
+  justify-content: space-between;
   position: relative;
   height: 400px;
 }
@@ -209,6 +211,10 @@ onUnmounted(() => {
 .divider-section {
   position: relative;
   height: 100%;
+}
+
+#undo {
+  margin-top: 5px;
 }
 
 #undo:hover {
