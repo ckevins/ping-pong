@@ -39,6 +39,7 @@ import UndoIcon from "./UndoIcon.vue";
 import type { Player } from "../types/player";
 import type { GameRecord } from "../types/game";
 import type { Point } from "../types/point";
+import type { playerId } from "../types/genericTypes";
 
 const props = defineProps<{
   newGameData: GameRecord;
@@ -56,17 +57,26 @@ const currentScore = computed((): Point | undefined => {
 })
 
 const currentPoint = computed((): Point => {
-  const playerOneId = game.value.playerOne.id;
-  const playerTwoId = game.value.playerTwo.id;
   const valueTbd = -1;
   return {
-    servingPlayer: Math.floor(numberOfPointsPlayed.value / 5) % 2 == 0 ? playerOneId : playerTwoId,
+    servingPlayer: getServingPlayer(),
     pointNumber: numberOfPointsPlayed.value + 1,
     pointWinner: valueTbd,
     playerOneScore: valueTbd,
     playerTwoScore: valueTbd,
   }
 })
+
+function getServingPlayer (): playerId {
+  if (isDeuce.value) {
+    // when it is deuce, switch server every 2 points
+    return Math.floor(numberOfPointsPlayed.value / 2) % 2 == 0 ? game.value.playerOne.id : game.value.playerTwo.id;
+  }
+
+  // otherwise swith server every 5 points
+  return Math.floor(numberOfPointsPlayed.value / 5) % 2 == 0 ? game.value.playerOne.id : game.value.playerTwo.id;
+
+}
 
 const isDeuce = computed((): boolean => {
   if (!currentScore.value || isFinalScore.value) return false;
