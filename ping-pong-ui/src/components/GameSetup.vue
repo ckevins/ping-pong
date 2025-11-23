@@ -1,10 +1,8 @@
 <template>
   <div>
-    <p>
-      Player One: {{ playerOne?.name || ''}}
-    </p>
-    <p>
-      Player Two: {{ playerTwo?.name || '' }}
+    <p v-for="(player, index) in playersFromApi" :key="index">
+      {{ player.name }}
+      {{ player.handedness }}
     </p>
     <button @click="initGame">Start Game</button>
   </div>
@@ -16,12 +14,11 @@ import type { Player } from "../types/player";
 import type { initGameData } from "../types/genericTypes";
 import { players } from '../constants/player-list';
 
-const playerOne = ref<Player | undefined>(players[0]);
-const playerTwo = ref<Player | undefined>(players[1]);
+const playersFromApi = ref<Player[]>([]);
 
 const initGameData = ref<initGameData>({
-  playerOne: playerOne.value!,
-  playerTwo: playerTwo.value!
+  playerOne: players[0]!,
+  playerTwo: players[1]!
 });
 
 const emit = defineEmits(["init-game"]);
@@ -41,8 +38,15 @@ function handleEnterKeyPress () {
   initGame();
 }
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress);
+  try {
+    const response = await fetch('/api/data');
+    const { data} = await response.json();
+    playersFromApi.value = data.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
 });
 
 onUnmounted(() => {

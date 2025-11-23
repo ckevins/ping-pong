@@ -23,7 +23,7 @@ import type { GameRecord } from "../types/game";
 import { Game } from "../types/game";
 import { players } from '../constants/player-list';
 
-const devModeOverride = true;
+const devModeOverride = false;
 
 const onSplashScreen = ref<boolean>(true);
 const inSetupMode = ref<boolean>(false);
