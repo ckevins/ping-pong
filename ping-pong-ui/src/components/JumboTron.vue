@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch } from "vue";
 import { PlayerScore, DividerLine } from ".";
 import UndoIcon from "./UndoIcon.vue";
 import type { Player } from "../types/player";
@@ -126,18 +126,19 @@ function undoUpdateWinnerInGameRecord () {
 }
 
 const isFinalScore = computed((): boolean => {
-  console.log('is this the culprit?');
   if (!currentScore.value) return false;
 
   const { leadScore } = getLeadScore(currentScore.value);
   const { trailingScore }= getTrailingScore(currentScore.value);
   
-  if (leadScore < 21) return false;
-  if (leadScore >= 21 && leadScore - trailingScore >= 2) {
-    updateWinnerInGameRecord(currentScore.value)
-    return true;
-  }
+  if (leadScore >= 21 && leadScore - trailingScore >= 2) return true;
   return false;
+})
+
+watch(isFinalScore, (newValue, oldValue) => {
+  if (newValue === true) {
+    updateWinnerInGameRecord(currentScore.value!);
+  }
 })
 
 function getPlayerScoreClass (player: Player): string {
