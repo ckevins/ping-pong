@@ -160,21 +160,20 @@ function getPlayerScoreClass (player: Player): string {
 }
 
 function handleKeyPress (event: any) {
-  if (event.key === 'ArrowLeft') {
-    updateScore(game.value.playerOne);
-  }
-
-  if (event.key === 'ArrowRight') {
-    updateScore(game.value.playerTwo);
-  }
-
-  if (event.key === 'Backspace') {
-    undoUpdateScore();
-  }
-
-  if (event.key === '`') {
-    undoUpdateWinnerInGameRecord();
-    game.value.points = [];
+  switch (event.key) {
+    case 'ArrowLeft':
+      updateScore(game.value.playerOne);
+      break;
+    case 'ArrowRight':
+      updateScore(game.value.playerTwo);
+      break;
+    case 'Backspace':
+      undoUpdateScore();
+      break;
+    case '`':
+      undoUpdateWinnerInGameRecord();
+      game.value.points = [];
+      break;
   }
 }
 
