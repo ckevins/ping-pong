@@ -1,66 +1,50 @@
 <template>
-  <main>
-    <div v-if="onSplashScreen">
-      <button 
-        @click="beginSetup()"
-        @keyup.enter="beginSetup()"
-        >
-        New Game
-      </button>
-    </div>
-    <div v-else-if="inSetupMode">
-      <GameSetup @init-game="initGame"/>
-    </div>
-    <div v-else-if="game" class="jumbo-tron text-center">
-      <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
-      <div class="flex justify-between score-section">
-        <PlayerScore
-        :class="getPlayerScoreClass(game.playerOne)"
-        :player="game.playerOne"
-        :score="currentScore?.playerOneScore || 0"
-        :is-serving="currentPoint.servingPlayer === 1"
-        :is-final-score="isFinalScore"
-        @update-score="updateScore(game.playerOne)"
-        />
-        <div class="divider-section">
-          <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
-          <div v-if="isDeuce" class="deuce">
-            <div class="deuce-text">Deuce</div>
-            <div class="deuce-text">Deuce</div>
-          </div>
+  <section class="jumbo-tron text-center">
+    <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
+    <div class="flex justify-between score-section">
+      <PlayerScore
+      :class="getPlayerScoreClass(game.playerOne)"
+      :player="game.playerOne"
+      :score="currentScore?.playerOneScore || 0"
+      :is-serving="currentPoint.servingPlayer === 1"
+      :is-final-score="isFinalScore"
+      @update-score="updateScore(game.playerOne)"
+      />
+      <div class="divider-section">
+        <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
+        <div v-if="isDeuce" class="deuce">
+          <div class="deuce-text">Deuce</div>
+          <div class="deuce-text">Deuce</div>
         </div>
-        <PlayerScore
-        :class="getPlayerScoreClass(game.playerTwo)"
-        :player="game.playerTwo"
-        :score="currentScore?.playerTwoScore || 0"
-        :is-serving="currentPoint.servingPlayer === 2"
-        :is-final-score="isFinalScore"
-        @update-score="updateScore(game.playerTwo)"
-        />
       </div>
-      <button id="undo" class="mt-5" @click="undoUpdateScore()">
-        <UndoIcon />
-      </button>
+      <PlayerScore
+      :class="getPlayerScoreClass(game.playerTwo)"
+      :player="game.playerTwo"
+      :score="currentScore?.playerTwoScore || 0"
+      :is-serving="currentPoint.servingPlayer === 2"
+      :is-final-score="isFinalScore"
+      @update-score="updateScore(game.playerTwo)"
+      />
     </div>
-  </main>
+    <button id="undo" class="mt-5" @click="undoUpdateScore()">
+      <UndoIcon />
+    </button>
+  </section>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, onUnmounted } from "vue";
-import { GameSetup, PlayerScore, DividerLine } from ".";
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import { PlayerScore, DividerLine } from ".";
 import UndoIcon from "./UndoIcon.vue";
 import type { Player } from "../types/player";
 import type { GameRecord } from "../types/game";
-import { Game } from "../types/game";
-import type { initGameData } from "../types/genericTypes";
 import type { Point } from "../types/point";
 
-const inSetupMode = ref<boolean>(false);
-const onSplashScreen = computed((): boolean => {
-  return !game.value && !inSetupMode.value;
-});
+const props = defineProps<{
+  newGameData: GameRecord;
+}>();
 
-const game = ref<GameRecord | null>();
+const game = ref<GameRecord>(props.newGameData);
 
 const numberOfPointsPlayed = computed((): number => {
   const points = game.value?.points;
@@ -169,23 +153,7 @@ function getPlayerScoreClass (player: Player): string {
   return (isFinalScore && game.value.winner === player.id) ? 'winner' : 'loser';
 }
 
-function beginSetup () {
-  console.log('Beginning Setup...');
-  inSetupMode.value = true;
-}
-
-function initGame (payload: initGameData) {
-  console.log('Creating Game...');
-  game.value = new Game(payload.playerOne, payload.playerTwo);
-  inSetupMode.value = false;
-}
-
 function handleKeyPress (event: any) {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-    if (onSplashScreen.value) beginSetup();
-  }
-
   if (event.key === 'ArrowLeft') {
     if (!game.value) return;
     updateScore(game.value.playerOne);
