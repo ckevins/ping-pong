@@ -24,7 +24,7 @@ const players = ref<Player[]>([
   },
   {
     id: 2,
-    name: 'Jacob',
+    name: 'Minnie',
     wins: 4,
     losses: 6
   }

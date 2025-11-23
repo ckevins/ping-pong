@@ -12,19 +12,23 @@
       <GameSetup @init-game="initGame"/>
     </div>
     <div v-else-if="game" class="text-center">
-      <p>Point {{ currentPoint.pointNumber }}</p>
-      <div class="flex justify-around">
+      <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
+      <div class="flex justify-between">
         <PlayerScore
-        :player="game.playerOne.name"
+        :class="getPlayerScoreClass(game.playerOne)"
+        :player="game.playerOne"
         :score="currentScore?.playerOneScore || 0"
         :is-serving="currentPoint.servingPlayer === 1"
+        :is-final-score="isFinalScore"
         @update-score="updateScore(game.playerOne)"
         />
         <DividerLine height="auto" width="4px" color="white" />
         <PlayerScore
-        :player="game.playerTwo.name"
+        :class="getPlayerScoreClass(game.playerTwo)"
+        :player="game.playerTwo"
         :score="currentScore?.playerTwoScore || 0"
         :is-serving="currentPoint.servingPlayer === 2"
+        :is-final-score="isFinalScore"
         @update-score="updateScore(game.playerTwo)"
         />
       </div>
@@ -77,7 +81,7 @@ const currentPoint = computed((): Point => {
 })
 
 function updateScore (pointWinner: Player) {
-  if (!game.value) return;
+  if (!game.value || isFinalScore.value) return;
 
   const pointToAdd: Point = {
     ...currentPoint.value,
@@ -94,6 +98,64 @@ function undoUpdateScore () {
   game.value.points.pop();
 }
 
+function getLeadScore (currentScore: Point) {
+  const leadScore: number = Math.max(currentScore.playerOneScore, currentScore.playerTwoScore);
+  const leadPlayer = currentScore.playerOneScore === leadScore ? game.value!.playerOne : game.value!.playerTwo;
+  return {
+    leadScore,
+    leadPlayer
+  }
+}
+
+function getTrailingScore (currentScore: Point) {
+  const trailingScore = Math.min(currentScore.playerOneScore, currentScore.playerTwoScore);
+  const trailingPlayer = currentScore.playerOneScore === trailingScore ? game.value!.playerOne : game.value!.playerTwo;
+  return {
+    trailingScore,
+    trailingPlayer
+  }
+}
+
+function updateWinnerInGameRecord (leadPlayer: Player, leadPlayerScore: number, trailingPlayer: Player, trailingPlayerScore: number) {
+  if (!game.value) return;
+  game.value = {
+    ...game.value,
+    winner: leadPlayer.id,
+    loser: trailingPlayer.id,
+    finalWinningScore: leadPlayerScore,
+    finalLosingScore: trailingPlayerScore
+  }
+}
+
+function undoUpdateWinnerInGameRecord () {
+  if (!game.value) return;
+    game.value = {
+    ...game.value,
+    winner: undefined,
+    loser: undefined,
+    finalWinningScore: undefined,
+    finalLosingScore: undefined
+  }
+}
+
+const isFinalScore = computed((): boolean => {
+  if (!game.value || !currentScore.value) return false;
+  const { leadScore, leadPlayer } = getLeadScore(currentScore.value);
+  const { trailingScore, trailingPlayer }= getTrailingScore(currentScore.value);
+  
+  if (leadScore < 21) return false;
+  if (leadScore >= 21 && leadScore - trailingScore >= 2) {
+    updateWinnerInGameRecord(leadPlayer, leadScore, trailingPlayer, trailingScore)
+    return true;
+  }
+  return false;
+})
+
+function getPlayerScoreClass (player: Player): string {
+  if (!isFinalScore.value || !game.value) return '';
+  return game.value.winner === player.id ? 'winner' : 'loser';
+}
+
 function beginSetup () {
   console.log('Beginning Setup...');
   inSetupMode.value = true;
@@ -108,34 +170,55 @@ function initGame (payload: initGameData) {
 function handleKeyPress (event: any) {
   if (event.key === 'Enter') {
     event.preventDefault();
-    handleEnterKeyPress();
+    if (onSplashScreen.value) beginSetup();
+  }
+
+  if (event.key === 'ArrowLeft') {
+    if (!game.value) return;
+    updateScore(game.value.playerOne);
+  }
+
+  if (event.key === 'ArrowRight') {
+    if (!game.value) return;
+    updateScore(game.value.playerTwo);
+  }
+
+  if (event.key === 'Backspace') {
+    if (!game.value) return;
+    undoUpdateScore();
+  }
+
+  if (event.key === '`') {
+    if (!game.value) return;
+    undoUpdateWinnerInGameRecord();
+    game.value.points = [];
   }
 }
 
-function handleEnterKeyPress () {
-  console.log('Enter Key Pressed...');
-  if (onSplashScreen.value) beginSetup();
-}
-
 onMounted(() => {
-  // Attach the event listener to the global window object
   window.addEventListener('keydown', handleKeyPress);
 });
 
 onUnmounted(() => {
-  // Remove the event listener when the component is unmounted
   window.removeEventListener('keydown', handleKeyPress);
 })
-
-// simple no-op handler referenced from the template
-const noop = () => {
-  /* intentionally empty */
-};
 </script>
 
 <style>
 #undo:hover {
   cursor: pointer;
   color: rgb(13, 76, 178);
+}
+
+.winner {
+  color: green;
+}
+
+.loser {
+  color: gray;
+}
+
+.hide-element {
+  visibility: hidden;
 }
 </style>
