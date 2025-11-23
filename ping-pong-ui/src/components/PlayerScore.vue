@@ -1,9 +1,14 @@
 <template>
   <div class="text-center player-score">
-    <p id="player-name">{{ props.player.name }}<span class="win-loss-record">({{ props.player.wins }} - {{ props.player.losses }})</span></p>
-    <div class="serving-indicator">
-      <PaddleIcon v-if="props.isServing && !props.isFinalScore" />
-    </div>
+    <section class="player-name-section">
+      <p id="player-name">{{ props.player.name }}
+        <span class="win-loss-record">({{ props.player.wins }} - {{ props.player.losses }})</span>
+      </p>
+      <div :class="playerPosition === 1 ? 'serving-indicator player-one' : 'serving-indicator player-two'">
+        <PaddleIcon :class="props.isServing && !props.isFinalScore ? '' : 'invisible'" />
+        <p :class="hasAdvantage ? '' : 'invisible'" id="advantage">Adv.</p>
+      </div>
+    </section>
     <div>
       <div id="jumbo-tron">{{ props.score }}</div>
     </div>
@@ -20,6 +25,8 @@ const props = defineProps<{
   score: number;
   isServing: boolean;
   isFinalScore: boolean;
+  hasAdvantage: boolean;
+  playerPosition: number;
 }>();
 
 const emit = defineEmits(["update-score"]);
@@ -29,6 +36,10 @@ const emit = defineEmits(["update-score"]);
 .player-score {
   flex-grow: 1;
   max-width: 48%;
+}
+
+.player-name-section {
+  position: relative;
 }
 
 .win-loss-record {
@@ -41,7 +52,21 @@ const emit = defineEmits(["update-score"]);
 }
 
 .serving-indicator {
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   min-height: 5rem;
+}
+
+.player-one {
+  right: 0;
+}
+
+.player-two {
+  left: 0;
 }
 
 #jumbo-tron {
@@ -54,5 +79,10 @@ const emit = defineEmits(["update-score"]);
 
 .invisible {
   opacity: 0;
+}
+
+#advantage {
+  color: green;
+  font-weight: bolder;
 }
 </style>

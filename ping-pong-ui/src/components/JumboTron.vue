@@ -8,6 +8,8 @@
       :score="currentScore?.playerOneScore || 0"
       :is-serving="currentPoint.servingPlayer === 1"
       :is-final-score="isFinalScore"
+      :has-advantage="hasAdvantage(game.playerOne)"
+      :player-position="1"
       @update-score="updateScore(game.playerOne)"
       />
       <div class="divider-section">
@@ -23,6 +25,8 @@
       :score="currentScore?.playerTwoScore || 0"
       :is-serving="currentPoint.servingPlayer === 2"
       :is-final-score="isFinalScore"
+      :has-advantage="hasAdvantage(game.playerTwo)"
+      :player-position="2"
       @update-score="updateScore(game.playerTwo)"
       />
     </div>
@@ -82,6 +86,16 @@ const isDeuce = computed((): boolean => {
   if (!currentScore.value || isFinalScore.value) return false;
   return currentScore.value.playerOneScore >= 20 && currentScore.value.playerTwoScore >= 20;
 });
+
+function hasAdvantage (player: Player): boolean {
+  if (
+    !isDeuce.value 
+    || !currentScore.value 
+    || currentScore.value?.playerOneScore === currentScore.value?.playerTwoScore
+  ) return false;
+  const { leadPlayer } = getLeadScore(currentScore.value);
+  return leadPlayer.id === player.id;
+}
 
 function updateScore (pointWinner: Player) {
   if (isFinalScore.value) return;

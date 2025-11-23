@@ -1,6 +1,6 @@
 <template>
 <svg
-style="width: 5rem; height: 5rem; margin: auto"
+style="width: 5rem; height: 5rem;"
 viewBox="0 0 24 24"
 >
 <path
