@@ -11,9 +11,9 @@
     <div v-else-if="inSetupMode">
       <GameSetup @init-game="initGame"/>
     </div>
-    <div v-else-if="game" class="text-center">
+    <div v-else-if="game" class="jumbo-tron text-center">
       <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
-      <div class="flex justify-between">
+      <div class="flex justify-between score-section">
         <PlayerScore
         :class="getPlayerScoreClass(game.playerOne)"
         :player="game.playerOne"
@@ -22,7 +22,13 @@
         :is-final-score="isFinalScore"
         @update-score="updateScore(game.playerOne)"
         />
-        <DividerLine height="auto" width="4px" color="white" />
+        <div class="divider-section">
+          <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
+          <div v-if="isDeuce" class="deuce">
+            <div class="deuce-text">Deuce</div>
+            <div class="deuce-text">Deuce</div>
+          </div>
+        </div>
         <PlayerScore
         :class="getPlayerScoreClass(game.playerTwo)"
         :player="game.playerTwo"
@@ -79,6 +85,11 @@ const currentPoint = computed((): Point => {
     playerTwoScore: -1,
   }
 })
+
+const isDeuce = computed((): boolean => {
+  if (!currentScore.value || isFinalScore.value) return false;
+  return currentScore.value?.playerOneScore >= 20 && currentScore.value?.playerTwoScore >= 20;
+});
 
 function updateScore (pointWinner: Player) {
   if (!game.value || isFinalScore.value) return;
@@ -152,8 +163,10 @@ const isFinalScore = computed((): boolean => {
 })
 
 function getPlayerScoreClass (player: Player): string {
-  if (!isFinalScore.value || !game.value) return '';
-  return game.value.winner === player.id ? 'winner' : 'loser';
+  if (!game.value) return '';
+  if (!isFinalScore.value && !isDeuce.value) return '';
+  if (isDeuce.value) return 'deuce';
+  return (isFinalScore && game.value.winner === player.id) ? 'winner' : 'loser';
 }
 
 function beginSetup () {
@@ -205,9 +218,38 @@ onUnmounted(() => {
 </script>
 
 <style>
+.score-section {
+  position: relative;
+  height: 400px;
+}
+
+.divider-section {
+  position: relative;
+  height: 100%;
+}
+
 #undo:hover {
   cursor: pointer;
   color: rgb(13, 76, 178);
+}
+
+.deuce {
+  color: orange;
+}
+
+.deuce-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-weight: bold;
+}
+
+.deuce-text:nth-child(1) {
+  transform: rotate(90deg);
+}
+
+.deuce-text:nth-child(2) {
+  transform: translateX(-50px) rotate(270deg);
 }
 
 .winner {
