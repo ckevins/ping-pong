@@ -76,7 +76,7 @@ const emit = defineEmits(["update-score"]);
 
 #jumbo-tron__score {
   font-size: 120px;
-  margin: 0;
+  font-weight: bolder;
 }
 
 .jumbo-tron__button {
