@@ -13,3 +13,7 @@ body, #app {
   display: flex;
   flex-direction: column;
 }
+
+main {
+  padding: 20px;
+}

@@ -18,27 +18,23 @@
           :score="currentScore?.playerTwoScore || 0" :is-serving="currentPoint.servingPlayer === game.playerTwo.id"
           :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerTwo)" :player-position="2"
           @update-score="updateScore(game.playerTwo)" />
-        <TheticsButton 
+        <Button 
           v-if="isFinalScore" 
           id="submit-game-button"
-          text="Submit Game"
+          label="Submit Game"
           color="rgb(85, 255, 85)"
           background-color="rgb(0, 37, 0)"
           border-color="rgb(85, 255, 85)"
           @click="submitGame()"
           >
-          Submit Game
-        </TheticsButton>
+        </Button>
       </div>
-      <TheticsButton 
-        id="undo"
-        color="white"
-        background-color= "rgb(0, 3, 29)"
+      <Button 
+        id="undo-button"
         @click="undoUpdateScore()"
-        variant="round"
         >
         <UndoIcon />
-      </TheticsButton>
+      </Button>
     </section>
     <section class="chart-container">
       <GameLineChart :game="game" />
@@ -48,12 +44,13 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import { PlayerScore, DividerLine, GameLineChart, TheticsButton } from ".";
+import { PlayerScore, DividerLine, GameLineChart } from ".";
 import UndoIcon from "./UndoIcon.vue";
 import type { Player } from "../types/player";
 import type { GameRecord } from "../types/game";
 import type { Point } from "../types/point";
 import type { playerId } from "../types/genericTypes";
+import Button from "primevue/button";
 
 const props = defineProps<{
   newGameData: GameRecord;
@@ -259,13 +256,11 @@ onUnmounted(() => {
   height: 100%;
 }
 
-#undo {
+#undo-button {
   margin-top: 5px;
-}
-
-#undo:hover {
-  cursor: pointer;
-  color: rgb(13, 76, 178);
+  color: white;
+  background-color: rgba(0,0,0,0);
+  border: none;
 }
 
 .deuce {

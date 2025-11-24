@@ -11,7 +11,9 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@primeuix/themes": "^1.2.5",
     "chart.js": "^4.5.1",
+    "primevue": "^4.4.1",
     "vue": "^3.2.38",
     "vue-chartjs": "^5.3.3",
     "vue-router": "^4.1.5"
