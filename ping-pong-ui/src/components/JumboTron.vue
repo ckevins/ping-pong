@@ -18,17 +18,27 @@
           :score="currentScore?.playerTwoScore || 0" :is-serving="currentPoint.servingPlayer === game.playerTwo.id"
           :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerTwo)" :player-position="2"
           @update-score="updateScore(game.playerTwo)" />
-        <button 
+        <TheticsButton 
           v-if="isFinalScore" 
           id="submit-game-button"
+          text="Submit Game"
+          color="rgb(85, 255, 85)"
+          background-color="rgb(0, 37, 0)"
+          border-color="rgb(85, 255, 85)"
           @click="submitGame()"
           >
           Submit Game
-        </button>
+        </TheticsButton>
       </div>
-      <button id="undo" @click="undoUpdateScore()">
+      <TheticsButton 
+        id="undo"
+        color="white"
+        background-color= "rgb(0, 3, 29)"
+        @click="undoUpdateScore()"
+        variant="round"
+        >
         <UndoIcon />
-      </button>
+      </TheticsButton>
     </section>
     <section class="chart-container">
       <GameLineChart :game="game" />
@@ -38,7 +48,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch } from "vue";
-import { PlayerScore, DividerLine, GameLineChart } from ".";
+import { PlayerScore, DividerLine, GameLineChart, TheticsButton } from ".";
 import UndoIcon from "./UndoIcon.vue";
 import type { Player } from "../types/player";
 import type { GameRecord } from "../types/game";
@@ -306,10 +316,6 @@ onUnmounted(() => {
   top: 50%;
   left: 50%;
   transform: translateX(-50%);
-  color: rgb(85, 255, 85);
-  background-color: rgb(0, 37, 0);
-  padding: 5px 10px;
-  border-radius: 5px;
 }
 
 </style>

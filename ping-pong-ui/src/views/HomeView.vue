@@ -4,6 +4,9 @@
       <TheticsButton 
         id="new-game-button"
         text="New Game"
+        color="lightblue"
+        background-color="rgb(0, 3, 29)"
+        border-color="lightblue"
         size="jumbo"
         @click="beginSetup()"
         @keyup.enter="beginSetup()"
