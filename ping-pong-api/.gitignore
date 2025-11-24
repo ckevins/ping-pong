@@ -27,4 +27,4 @@ coverage
 *.sln
 *.sw?
 
-ping-pong.db
+./ping-pong.db
