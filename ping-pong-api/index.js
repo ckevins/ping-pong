@@ -1,5 +1,6 @@
 // index.js
 const express = require('express');
+const db = require('./database');
     
 const app = express();
 const port = 3000; // Or any desired port
@@ -14,10 +15,39 @@ app.use((req, res, next) => {
     next();
 });
 
-// Define a simple GET route
-app.get('/api/data', (req, res) => {
+app.get('/api/players', (req, res) => {
     console.log('Request processing...');
-    res.json({ message: 'Hello from the API!', data: ['item1', 'item2'] });
+    const sql = `
+        WITH playerGames AS (SELECT  p.id,
+            p.name,
+            p.handedness,
+            g.winner,
+            g.loser
+        FROM Players p
+        LEFT JOIN Games g
+            ON 
+                p.id = g.playerOne
+                OR 
+                p.id = g.playerTwo
+        ) SELECT
+            name,
+            handedness,
+            COUNT(winner = id) AS wins,
+            COUNT(loser = id) AS losses
+        FROM playerGames
+        GROUP BY 
+            name,
+            handedness
+    `;
+    db.all(sql, [], (err, rows) => {
+        if (err) {
+            res.status(500).json({"error": err.message});
+            return;
+        }
+        res.json({
+            data: rows
+        })
+    })
 });
 
 // Start the server

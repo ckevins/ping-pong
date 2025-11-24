@@ -41,9 +41,9 @@ function handleEnterKeyPress () {
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress);
   try {
-    const response = await fetch('/api/data');
-    const { data} = await response.json();
-    playersFromApi.value = data.data;
+    const response = await fetch('/api/players');
+    const { data } = await response.json();
+    playersFromApi.value = data;
   } catch (error) {
     console.error('Error fetching data:', error);
   }
