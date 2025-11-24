@@ -4,7 +4,7 @@
       <div :class="isFinalScore ? 'hide-element' : ''">Point {{ currentPoint.pointNumber }}</div>
       <div id="jumbo-tron">
         <PlayerScore :class="getPlayerScoreClass(game.playerOne)" :player="game.playerOne"
-          :score="currentScore?.playerOneScore || 0" :is-serving="currentPoint.servingPlayer === 1"
+          :score="currentScore?.playerOneScore || 0" :is-serving="currentPoint.servingPlayer === game.playerOne.id"
           :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerOne)" :player-position="1"
           @update-score="updateScore(game.playerOne)" />
         <div class="divider-section">
@@ -15,7 +15,7 @@
           </div>
         </div>
         <PlayerScore :class="getPlayerScoreClass(game.playerTwo)" :player="game.playerTwo"
-          :score="currentScore?.playerTwoScore || 0" :is-serving="currentPoint.servingPlayer === 2"
+          :score="currentScore?.playerTwoScore || 0" :is-serving="currentPoint.servingPlayer === game.playerTwo.id"
           :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerTwo)" :player-position="2"
           @update-score="updateScore(game.playerTwo)" />
         <button 
