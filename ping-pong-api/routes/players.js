@@ -7,29 +7,31 @@ const router = express.Router();
 router.get('/players', (req, res) => {
   console.log('Request processing...');
   const sql = `
-        WITH playerGames AS (SELECT  p.id,
+    SELECT  p.id,
             p.name,
             p.handedness,
-            g.winnerId,
-            g.loserId
+			COALESCE(w.wins, 0) AS wins,
+			COALESCE(l.losses, 0) AS losses
         FROM Players p
-        LEFT JOIN Games g
-            ON 
-                p.id = g.playerOneId
-                OR 
-                p.id = g.playerTwoId
-        ) SELECT
-            id,
-            name,
-            handedness,
-            COUNT(winnerId = id) AS wins,
-            COUNT(loserId = id) AS losses
-        FROM playerGames
-        GROUP BY 
-            id,
-            name,
-            handedness
-    `;
+        LEFT JOIN (
+			SELECT
+				winnerId AS playerId,
+				COUNT(*) AS wins
+			FROM Games 
+			GROUP BY
+				winnerId
+		) w
+			ON p.id = w.playerId
+		LEFT JOIN (
+			SELECT
+				loserId AS playerId,
+				COUNT(*) AS losses
+			FROM Games 
+			GROUP BY 
+				loserId
+		) l 
+			ON p.id = l.playerId;
+  `;
   db.all(sql, [], (err, rows) => {
     if (err) {
       res.status(500).json({ error: err.message });
