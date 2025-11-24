@@ -51,6 +51,9 @@ import type { GameRecord } from "../types/game";
 import type { Point } from "../types/point";
 import type { playerId } from "../types/genericTypes";
 import Button from "primevue/button";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const props = defineProps<{
   newGameData: GameRecord;
@@ -208,13 +211,15 @@ function getDividerColor () {
 
 async function submitGame () {
   try {
-    fetch('/api/games', {
+    const response = await fetch('/api/games', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Indicate the content type
       },
       body: JSON.stringify(game.value), // Convert data to JSON string
     })
+    const { data } = await response.json();
+    router.push({ name: 'Game Report', params: { id: data.gameId } });
   } catch (error) {
     console.error('Error fetching data:', error);
   }

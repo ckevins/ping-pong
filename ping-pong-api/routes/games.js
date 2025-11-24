@@ -81,7 +81,7 @@ router.post("/games", async (req, res) => {
     });
   });
 
-  res.status(200);
+  res.json({ data: { gameId }});
 });
 
 module.exports = router;
