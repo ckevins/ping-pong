@@ -15,40 +15,12 @@ app.use((req, res, next) => {
     next();
 });
 
-app.get('/api/players', (req, res) => {
-    console.log('Request processing...');
-    const sql = `
-        WITH playerGames AS (SELECT  p.id,
-            p.name,
-            p.handedness,
-            g.winner,
-            g.loser
-        FROM Players p
-        LEFT JOIN Games g
-            ON 
-                p.id = g.playerOne
-                OR 
-                p.id = g.playerTwo
-        ) SELECT
-            name,
-            handedness,
-            COUNT(winner = id) AS wins,
-            COUNT(loser = id) AS losses
-        FROM playerGames
-        GROUP BY 
-            name,
-            handedness
-    `;
-    db.all(sql, [], (err, rows) => {
-        if (err) {
-            res.status(500).json({"error": err.message});
-            return;
-        }
-        res.json({
-            data: rows
-        })
-    })
-});
+// Move API routes to separate router files in ./routes
+const playersRouter = require('./routes/players');
+const migrationsRouter = require('./routes/migrations');
+// mount the players router at /api
+app.use('/api', playersRouter);
+app.use('/api', migrationsRouter)
 
 // Start the server
 app.listen(port, () => {
