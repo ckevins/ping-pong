@@ -21,9 +21,6 @@ import { JumboTron, GameSetup } from "../components";
 import type { initGameData } from "../types/genericTypes";
 import type { GameRecord } from "../types/game";
 import { Game } from "../types/game";
-import { players } from '../constants/player-list';
-
-const devModeOverride = false;
 
 const onSplashScreen = ref<boolean>(true);
 const inSetupMode = ref<boolean>(false);
@@ -49,10 +46,6 @@ function handleKeyPress (event: any) {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyPress);
-  if (devModeOverride) {
-    onSplashScreen.value = false;
-    newGameData.value = new Game(players[0]!, players[1]!);
-  }
 });
 
 onUnmounted(() => {

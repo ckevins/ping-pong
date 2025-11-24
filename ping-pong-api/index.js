@@ -17,9 +17,11 @@ app.use((req, res, next) => {
 
 // Move API routes to separate router files in ./routes
 const playersRouter = require('./routes/players');
+const gamesRouter = require('./routes/games');
 const migrationsRouter = require('./routes/migrations');
 // mount the players router at /api
 app.use('/api', playersRouter);
+app.use('/api', gamesRouter);
 app.use('/api', migrationsRouter)
 
 // Start the server

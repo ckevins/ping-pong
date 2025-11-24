@@ -8,7 +8,7 @@
           :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerOne)" :player-position="1"
           @update-score="updateScore(game.playerOne)" />
         <div class="divider-section">
-          <DividerLine height="100%" width="4px" :color="isDeuce ? 'orange' : 'white'" />
+          <DividerLine height="100%" width="4px" :color="getDividerColor()" />
           <div v-if="isDeuce" class="deuce deuce-text-container">
             <p class="deuce-text" id="deuce-text-1">Deuce!</p>
             <p class="deuce-text" id="deuce-text-2">Deuce!</p>
@@ -18,6 +18,13 @@
           :score="currentScore?.playerTwoScore || 0" :is-serving="currentPoint.servingPlayer === 2"
           :is-final-score="isFinalScore" :has-advantage="hasAdvantage(game.playerTwo)" :player-position="2"
           @update-score="updateScore(game.playerTwo)" />
+        <button 
+          v-if="isFinalScore" 
+          id="submit-game-button"
+          @click="submitGame()"
+          >
+          Submit Game
+        </button>
       </div>
       <button id="undo" @click="undoUpdateScore()">
         <UndoIcon />
@@ -186,6 +193,26 @@ function handleKeyPress(event: any) {
   }
 }
 
+function getDividerColor () {
+  if (isDeuce.value) return 'orange';
+  if (isFinalScore.value) return 'clear';
+  return 'white';
+}
+
+async function submitGame () {
+  try {
+    fetch('/api/games', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Indicate the content type
+      },
+      body: JSON.stringify(game.value), // Convert data to JSON string
+    })
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+}
+
 onMounted(() => {
   window.addEventListener('keydown', handleKeyPress);
 });
@@ -208,7 +235,6 @@ onUnmounted(() => {
   justify-content: space-around;
   font-family: "Doto";
 }
-
 
 #jumbo-tron {
   display: flex;
@@ -274,4 +300,16 @@ onUnmounted(() => {
 .hide-element {
   visibility: hidden;
 }
+
+#submit-game-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgb(85, 255, 85);
+  background-color: rgb(0, 37, 0);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
 </style>

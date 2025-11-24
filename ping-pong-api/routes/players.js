@@ -19,12 +19,14 @@ router.get('/players', (req, res) => {
                 OR 
                 p.id = g.playerTwoId
         ) SELECT
+            id,
             name,
             handedness,
             COUNT(winnerId = id) AS wins,
             COUNT(loserId = id) AS losses
         FROM playerGames
         GROUP BY 
+            id,
             name,
             handedness
     `;
