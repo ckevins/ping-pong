@@ -50,27 +50,27 @@ async function getGameRecord (gameId, res) {
   `;
   
   const playerDataSql = `
-  SELECT
-  pl.name AS player,
-  COUNT(*) AS numberOfServes,
-  COUNT(CASE
-  WHEN pointWinner = servingPlayer  THEN 1
-  ELSE NULL
-  END) AS numberOfServesWon,
-  CASE
-  WHEN servingPlayer = g.playerOneId
-  THEN MAX(playerOneScore - playerTwoScore)
-  WHEN servingPlayer = g.playerTwoId
-  THEN MAX(playerTwoScore - playerOneScore)
-  END AS largestLead
-  FROM points p
-  JOIN games g 
-  ON p.gameId = g.id
-  JOIN players pl 
-  ON p.servingPlayer = pl.id
-  WHERE p.gameId = ${gameId}
-  GROUP BY
-  servingPlayer;
+    SELECT
+      pl.name AS player,
+      COUNT(*) AS numberOfServes,
+      COUNT(CASE
+        WHEN pointWinner = servingPlayer THEN 1
+        ELSE NULL
+      END) AS numberOfServesWon,
+      CASE
+        WHEN servingPlayer = g.playerOneId
+        THEN MAX(playerOneScore - playerTwoScore)
+        WHEN servingPlayer = g.playerTwoId
+        THEN MAX(playerTwoScore - playerOneScore)
+      END AS largestLead
+    FROM points p
+    JOIN games g 
+      ON p.gameId = g.id
+    JOIN players pl 
+      ON p.servingPlayer = pl.id
+    WHERE p.gameId = ${gameId}
+    GROUP BY
+      servingPlayer;
   `
 
   const pointDataSql = `
