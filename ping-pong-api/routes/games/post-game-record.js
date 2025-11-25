@@ -1,10 +1,7 @@
-const express = require("express");
-const db = require("../database");
-const { executeQueryAsync } = require("../query-helpers");
+const db = require("../../database");
+const { executeQueryAsync } = require("../../query-helpers");
 
-const router = express.Router();
-
-router.post("/games", async (req, res) => {
+async function postGameRecord (req, res) {
   console.log("Saving game record...");
 
   const gameData = {
@@ -82,6 +79,6 @@ router.post("/games", async (req, res) => {
   });
 
   res.json({ data: { gameId }});
-});
+}
 
-module.exports = router;
+module.exports = postGameRecord;
