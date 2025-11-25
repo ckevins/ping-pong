@@ -51,7 +51,7 @@ async function getGameRecord (gameId, res) {
   
   const playerDataSql = `
     SELECT
-      pl.name AS player,
+      pl.name AS name,
       COUNT(*) AS numberOfServes,
       COUNT(CASE
         WHEN pointWinner = servingPlayer THEN 1

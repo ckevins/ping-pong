@@ -4,15 +4,15 @@
       <p id="player-name">{{ props.player.name }}
         <span class="win-loss-record">({{ props.player.wins }} - {{ props.player.losses }})</span>
       </p>
-      <div :class="playerPosition === 1 ? 'serving-indicator player-one' : 'serving-indicator player-two'">
+      <div :class="props.playerPosition === 1 ? 'serving-indicator player-one' : 'serving-indicator player-two'">
         <PaddleIcon :class="props.isServing && !props.isFinalScore ? '' : 'invisible'" />
-        <p :class="hasAdvantage ? '' : 'invisible'" id="advantage">Adv.</p>
+        <p :class="props.hasAdvantage ? '' : 'invisible'" id="advantage">Adv.</p>
       </div>
     </section>
     <div>
       <p id="jumbo-tron__score">{{ props.score }}</p>
     </div>
-    <div role="button" class="jumbo-tron__button" @click="emit('update-score')">+</div>
+    <div :class="props.isFinalScore ? 'invisible' : ''" role="button" class="jumbo-tron__button" @click="emit('update-score')">+</div>
   </div>
 </template>
 
@@ -20,14 +20,20 @@
 import type { Player } from "../types/player";
 import PaddleIcon from './PaddleIcon.vue';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   player: Player;
-  score: number;
-  isServing: boolean;
-  isFinalScore: boolean;
-  hasAdvantage: boolean;
-  playerPosition: number;
-}>();
+  score?: number;
+  isServing?: boolean;
+  isFinalScore?: boolean;
+  hasAdvantage?: boolean;
+  playerPosition?: number;
+}>(), {
+  score: 0,
+  isServing: false,
+  isFinalScore: false,
+  hasAdvantage: false,
+  playerPosition: 1,
+});
 
 const emit = defineEmits(["update-score"]);
 </script>
