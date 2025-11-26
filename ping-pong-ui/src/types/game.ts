@@ -10,6 +10,7 @@ type GameRecord = {
   finalWinningScore: number | undefined;
   finalLosingScore: number | undefined;
   points: Point[];
+  numberOfTies?: number
 }
 
 class Game implements GameRecord {
