@@ -28,6 +28,7 @@ router.post('/run-migrations', (req, res) => {
     "id"	INTEGER NOT NULL UNIQUE,
     "name"	TEXT,
     "handedness"	TEXT,
+    "isTestUser" INTEGER NOT NULL,
     PRIMARY KEY("id" AUTOINCREMENT)
     );
     `,
@@ -44,12 +45,12 @@ router.post('/run-migrations', (req, res) => {
     FOREIGN KEY("gameId") REFERENCES "games"("id")
     );
     `,
-    `INSERT INTO "main"."players" ("name", "handedness") VALUES ('Cody', 'left');`,
-    `INSERT INTO "main"."players" ("name", "handedness") VALUES ('Tanner', 'left');`,
-    `INSERT INTO "main"."players" ("name", "handedness") VALUES ('Jacob', 'right');`,
-    `INSERT INTO "main"."players" ("name", "handedness") VALUES ('Andrew', 'right');`,
-    `INSERT INTO "main"."players" ("name", "handedness") VALUES ('Minnie', 'ambidextrous');`,
-    `INSERT INTO "main"."players" ("name", "handedness") VALUES ('Meg', 'right');`
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Barry Bluejeans', 'left', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Shlabethany', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Jimothy', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Rob Handsome', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Tommy Pickles', 'right', 1);`,
+    ``
   ];
 
   db.serialize(() => {
