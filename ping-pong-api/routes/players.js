@@ -13,7 +13,7 @@ SELECT
   p.handedness,
   COALESCE(w.wins, 0) AS wins,
   COALESCE(l.losses, 0) AS losses,
-  ROUND(CAST(COALESCE(w.wins, 0) AS FLOAT)/ (w.wins + l.losses), 3) AS winningPct,
+  ROUND(CAST(COALESCE(w.wins, 0) AS FLOAT)/ (COALESCE(w.wins, 0) + COALESCE(l.losses, 0)), 3) AS winningPct,
   stats.gamesPlayed,
   stats.pointsPlayed,
   stats.pointsWon,
@@ -37,7 +37,7 @@ FROM Players p
       loserId
   ) l 
   ON p.id = l.playerId
-  JOIN (
+  LEFT JOIN (
     SELECT
       p.id,
       COUNT(DISTINCT g.id) AS gamesPlayed,

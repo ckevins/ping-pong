@@ -15,6 +15,8 @@
         @rowClick="handleRowClick"
         scrollable 
         scrollHeight="70vh" 
+        sortField="gameId"
+        :sortOrder="-1"
         >
         <template #header>
           <div class="flex justify-between">
@@ -27,11 +29,14 @@
           </div>
         </template>
         
-        <Column field="gameId" header="Game #" sortable></Column>
+        <Column field="gameId" header="Game #" sortable style="width: 8rem"></Column>
         <Column field="winner" header="Winner" sortable></Column>
         <Column field="loser" header="Loser" sortable></Column>
-        <Column field="finalWinningScore" header="Winning Score" sortable></Column>
-        <Column field="finalLosingScore" header="Losing Score" sortable></Column>
+        <Column field="finalWinningScore" header="Final Score">
+          <template #body="{ data }">
+              {{ data.finalWinningScore }} - {{ data.finalLosingScore }}
+          </template>
+        </Column>
       </DataTable>
     </div>
   </main>

@@ -2,7 +2,7 @@
   <div class="text-center jumbo-tron__half">
     <section class="player-name-section">
       <p id="player-name">{{ props.player.name }}
-        <span class="win-loss-record">({{ props.player.wins }} - {{ props.player.losses }})</span>
+        <span class="win-loss-record">({{ props.player.wins || 0 }} - {{ props.player.losses || 0 }})</span>
       </p>
       <div :class="props.playerPosition === 1 ? 'serving-indicator player-one' : 'serving-indicator player-two'">
         <PaddleIcon :class="props.isServing && !props.isFinalScore ? '' : 'invisible'" />

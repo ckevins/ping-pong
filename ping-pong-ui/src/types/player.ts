@@ -6,4 +6,9 @@ export type Player = {
   handedness: string;
   wins: number;
   losses: number;
+  winningPct: number;
+  gamesPlayed: number;
+  pointsPlayed: number;
+  pointsWon: number;
+  pointWinPct: number;
 }

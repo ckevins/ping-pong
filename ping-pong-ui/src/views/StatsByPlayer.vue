@@ -15,6 +15,8 @@
         @rowClick="handleRowClick"
         scrollable 
         scrollHeight="70vh" 
+        sortField="winningPct"
+        :sortOrder="-1"
         >
         <template #header>
           <div class="flex justify-between">
@@ -30,11 +32,31 @@
         <Column field="name" header="Name" sortable></Column>
         <Column field="wins" header="Wins" sortable></Column>
         <Column field="losses" header="Losses" sortable></Column>
-        <Column field="winningPct" header="Winning %" sortable></Column>
-        <Column field="gamesPlayed" header="GP" sortable></Column>
-        <Column field="pointsPlayed" header="Points Played" sortable></Column>
-        <Column field="pointsWon" header="Points Won" sortable></Column>
-        <Column field="pointWinPct" header="Point Win %" sortable></Column>
+        <Column field="winningPct" header="Winning %" sortable>
+          <template #body="{ data }">
+              {{ data.winningPct || data.winningPct === 0 ? formatPercentage(data.winningPct) : '-' }}
+          </template>
+        </Column>
+        <Column field="gamesPlayed" header="GP" sortable>
+          <template #body="{ data }">
+              {{ data.gamesPlayed || '-' }}
+          </template>
+        </Column>
+        <Column field="pointsPlayed" header="Points Played" sortable>
+          <template #body="{ data }">
+              {{ data.pointsPlayed || '-' }}
+          </template>
+        </Column>
+        <Column field="pointsWon" header="Points Won" sortable>
+          <template #body="{ data }">
+              {{ data.pointsWon || '-' }}
+          </template>
+        </Column>
+        <Column field="pointWinPct" header="Point Win %" sortable>
+          <template #body="{ data }">
+            {{ data.pointWinPct || data.pointWinPct === 0 ? formatPercentage(data.pointWinPct) : '-' }}
+          </template>
+        </Column>
       </DataTable>
     </div>
   </main>
@@ -54,6 +76,10 @@ const filters = ref({
 
 function handleRowClick (event: { data: {}; }) {
   console.log('ROW CLICKED', event.data);
+}
+
+function formatPercentage (number: number) {
+  return number.toFixed(3);
 }
 
 onMounted(async () => {
