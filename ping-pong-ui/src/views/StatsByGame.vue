@@ -1,6 +1,7 @@
 
 <template>
   <main>
+    <h1>Game Records</h1>
     <div class="card">
       <DataTable 
         stripedRows 

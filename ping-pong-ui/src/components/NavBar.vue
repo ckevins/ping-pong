@@ -1,5 +1,5 @@
 <template>
-  <Menubar :model="items" />
+  <Menubar class="ping-pong-menu" :model="items" />
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
@@ -40,5 +40,7 @@ const items = ref([
 </script>
 
 <style>
-
+.ping-pong-menu {
+    font-family: "Doto";
+}
 </style>

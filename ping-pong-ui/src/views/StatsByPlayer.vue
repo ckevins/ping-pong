@@ -1,12 +1,73 @@
+
 <template>
-<div>
-  STATS BY PLAYER
-</div>
+  <main>
+    <h1>Players</h1>
+    <div class="card">
+      <DataTable 
+        stripedRows 
+        :value="playerData"
+        paginator 
+        :rows="10" 
+        :rowsPerPageOptions="[10, 20, 50]"
+        removableSort
+        :globalFilterFields="['name']"
+        :filters="filters" 
+        @rowClick="handleRowClick"
+        scrollable 
+        scrollHeight="70vh" 
+        >
+        <template #header>
+          <div class="flex justify-between">
+            <IconField>
+              <InputIcon>
+                <i class="pi pi-search" />
+              </InputIcon>
+              <InputText v-model="filters['global'].value" placeholder="Search" />
+            </IconField>
+          </div>
+        </template>
+        
+        <Column field="name" header="Name" sortable></Column>
+        <Column field="wins" header="Wins" sortable></Column>
+        <Column field="losses" header="Losses" sortable></Column>
+        <Column field="winningPct" header="Winning %" sortable></Column>
+        <Column field="gamesPlayed" header="GP" sortable></Column>
+        <Column field="pointsPlayed" header="Points Played" sortable></Column>
+        <Column field="pointsWon" header="Points Won" sortable></Column>
+        <Column field="pointWinPct" header="Point Win %" sortable></Column>
+      </DataTable>
+    </div>
+  </main>
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from "vue";
+import { FilterMatchMode } from '@primevue/core/api';
+// import { useRouter } from "vue-router";
+import type { Player } from "../types/player";
+
+// const router = useRouter();
+const playerData = ref<Player[]>([]);
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS }
+});
+
+function handleRowClick (event: { data: {}; }) {
+  console.log('ROW CLICKED', event.data);
+}
+
+onMounted(async () => {
+  try {
+    const response = await fetch('/api/players');
+    const { data } = await response.json();
+    playerData.value = data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+});
 </script>
 
 <style>
+
 
 </style>
