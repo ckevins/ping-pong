@@ -9,6 +9,11 @@ import Checkbox from 'primevue/checkbox';
 import Divider from 'primevue/divider';
 import Chart from 'primevue/chart';
 import Menubar from 'primevue/menubar';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import IconField from 'primevue/iconfield';
+import InputIcon from 'primevue/inputicon';
+import InputText from 'primevue/inputtext';
 
 const app = createApp(App);
 
@@ -24,5 +29,10 @@ app.component('Checkbox', Checkbox);
 app.component('Divider', Divider);
 app.component('Chart', Chart);
 app.component('Menubar', Menubar);
+app.component('DataTable', DataTable);
+app.component('Column', Column);
+app.component('IconField', IconField);
+app.component('InputIcon', InputIcon);
+app.component('InputText', InputText);
 
 app.mount("#app");
