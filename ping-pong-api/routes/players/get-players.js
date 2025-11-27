@@ -1,11 +1,8 @@
-const express = require('express');
-const db = require('../database');
+const db = require("../../database");
+const { executeQueryAsync } = require("../../query-helpers");
 
-const router = express.Router();
-
-// GET /api/players
-router.get('/players', (req, res) => {
-  console.log('Request processing...');
+async function getPlayers (req, res) {
+  console.log("Fetching players...");
   const sql = `
 SELECT  
   p.id,
@@ -61,7 +58,8 @@ FROM Players p
       ON g.id = po.gameId
     GROUP BY p.id
   ) stats 
-  ON p.id = stats.id;
+  ON p.id = stats.id
+WHERE isTestUser = 0;
   `;
   db.all(sql, [], (err, rows) => {
     if (err) {
@@ -70,6 +68,6 @@ FROM Players p
     }
     res.json({ data: rows });
   });
-});
+}
 
-module.exports = router;
+module.exports = getPlayers;

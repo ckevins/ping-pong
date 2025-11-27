@@ -24,7 +24,8 @@ async function postGameRecord (req, res) {
         "winnerId",
         "loserId",
         "finalWinningScore",
-        "finalLosingScore"
+        "finalLosingScore",
+        "date"
       ) 
     VALUES 
       (
@@ -33,7 +34,8 @@ async function postGameRecord (req, res) {
         ${gameData.winnerId}, 
         ${gameData.loserId}, 
         ${gameData.finalWinningScore}, 
-        ${gameData.finalLosingScore}
+        ${gameData.finalLosingScore},
+        datetime('now') || 'Z'
       );
     `;
 

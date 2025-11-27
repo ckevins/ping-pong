@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from 'pinia';
 import App from "./App.vue";
 import "./style.scss";
 import router from "./router";
@@ -14,9 +15,12 @@ import Column from 'primevue/column';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
 import InputText from 'primevue/inputtext';
+import ToggleSwitch from 'primevue/toggleswitch';
 
 const app = createApp(App);
+const pinia = createPinia();
 
+app.use(pinia);
 app.use(router);
 app.use(PrimeVue, {
   theme: {
@@ -34,5 +38,6 @@ app.component('Column', Column);
 app.component('IconField', IconField);
 app.component('InputIcon', InputIcon);
 app.component('InputText', InputText);
+app.component('ToggleSwitch', ToggleSwitch);
 
 app.mount("#app");

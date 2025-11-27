@@ -16,7 +16,7 @@ app.use((req, res, next) => {
 });
 
 // Move API routes to separate router files in ./routes
-const playersRouter = require('./routes/players');
+const playersRouter = require('./routes/players/players-router');
 const gamesRouter = require('./routes/games/games-router');
 const migrationsRouter = require('./routes/migrations');
 // mount the players router at /api

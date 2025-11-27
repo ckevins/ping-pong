@@ -63,12 +63,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { FilterMatchMode } from '@primevue/core/api';
-// import { useRouter } from "vue-router";
 import type { Player } from "../types/player";
+import { usePingPongStore } from '../stores/ping-pong';
+import { storeToRefs } from 'pinia'
 
-// const router = useRouter();
+const store = usePingPongStore();
+const { useTestUsers } = storeToRefs(store)
+const { fetchPlayers } = store;
+
 const playerData = ref<Player[]>([]);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS }
@@ -83,14 +87,12 @@ function formatPercentage (number: number) {
 }
 
 onMounted(async () => {
-  try {
-    const response = await fetch('/api/players');
-    const { data } = await response.json();
-    playerData.value = data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
+  playerData.value = await fetchPlayers(useTestUsers.value);
 });
+
+watch(useTestUsers, async () => {
+  playerData.value = await fetchPlayers(useTestUsers.value);
+})
 </script>
 
 <style>

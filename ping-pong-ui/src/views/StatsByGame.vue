@@ -30,6 +30,11 @@
         </template>
         
         <Column field="gameId" header="Game #" sortable style="width: 8rem"></Column>
+        <Column field="date" header="Game Time" sortable style="width: 12rem">
+          <template #body="{ data }">
+              {{ formatDate(data.date) }}
+          </template>
+        </Column>
         <Column field="winner" header="Winner" sortable></Column>
         <Column field="loser" header="Loser" sortable></Column>
         <Column field="finalWinningScore" header="Final Score">
@@ -57,6 +62,19 @@ const filters = ref({
 function handleRowClick (event: { data: { gameId: any; }; }) {
   console.log('ROW SELECTED', event.data.gameId);
   router.push({ name: 'Game Report', params: { id: event.data.gameId } });
+}
+
+function formatDate (value: string) {
+  const formatter = new Intl.DateTimeFormat('en-US', { 
+    year: 'numeric', 
+    month: '2-digit', 
+    day: '2-digit', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+  });
+  const utcDate = new Date(value);
+  return formatter.format(utcDate);
+
 }
 
 onMounted(async () => {

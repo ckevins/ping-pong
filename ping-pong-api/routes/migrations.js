@@ -46,11 +46,15 @@ router.post('/run-migrations', (req, res) => {
     );
     `,
     `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Barry Bluejeans', 'left', 1);`,
-    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Shlabethany', 'right', 1);`,
-    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Jimothy', 'right', 1);`,
-    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Rob Handsome', 'right', 1);`,
-    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser) VALUES ('Tommy Pickles', 'right', 1);`,
-    ``
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Shlabethany', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Jimothy', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Rob Handsome', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Tommy Pickles', 'right', 1);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Cody', 'L', 0);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Tanner', 'L', 0);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Meg', 'R', 0);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Minnie', 'L/R', 0);`,
+    `INSERT INTO "main"."players" ("name", "handedness", "isTestUser") VALUES ('Cello', 'L/R', 0);`
   ];
 
   db.serialize(() => {

@@ -1,7 +1,7 @@
 <template>
   <section id="player-select-section" >
     <p>{{ playerSelectTip }}</p>
-    <div class="player-option" v-for="(player, index) in playersFromApi" :key="index">
+    <div class="player-option" v-for="(player, index) in playerData" :key="index">
       <Checkbox 
         v-model="selectedPlayers"
         name="selectedPlayers"
@@ -16,13 +16,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import type { Player } from "../types/player";
 import type { initGameData } from "../types/genericTypes";
 import Button from "primevue/button";
 import Checkbox from 'primevue/checkbox';
+import { usePingPongStore } from "../stores/ping-pong";
+import { storeToRefs } from "pinia";
 
-const playersFromApi = ref<Player[]>([]);
+const store = usePingPongStore();
+const { useTestUsers } = storeToRefs(store)
+const { fetchPlayers } = store;
+
+const playerData = ref<Player[]>([]);
 const selectedPlayers = ref<Player[]>([]);
 
 const playerSelectTip = computed(() => {
@@ -43,14 +49,12 @@ const initGameDisabled = computed(() => {
 const emit = defineEmits(["init-game"]);
 
 function initGame() {
-  console.log('Init game...');
   if (initGameDisabled.value) return;
 
   const initGameData: initGameData = {
     playerOne: selectedPlayers.value[0]!,
     playerTwo: selectedPlayers.value[1]!
   }
-  console.log('With players:', initGameData);
   emit('init-game', initGameData);
 }
 
@@ -72,19 +76,16 @@ function handleEnterKeyPress () {
 
 onMounted(async () => {
   window.addEventListener('keydown', handleKeyPress);
-  try {
-    const response = await fetch('/api/players');
-    const { data } = await response.json();
-    playersFromApi.value = data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
+  playerData.value = await fetchPlayers(useTestUsers.value);
 });
 
 onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyPress);
 })
 
+watch(useTestUsers, async () => {
+  playerData.value = await fetchPlayers(useTestUsers.value);
+})
 </script>
 
 <style scoped>

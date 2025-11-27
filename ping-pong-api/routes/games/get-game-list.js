@@ -7,6 +7,7 @@ async function getGamesList (req, res) {
   const getGameDataSql = `
     SELECT
       g.id AS gameId,
+      g.date AS date,
       w.name AS winner,
       l.name AS loser,
       g.finalWinningScore,
