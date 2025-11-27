@@ -1,42 +1,29 @@
 <template>
   <main id="home-view">
-    <section id="splash" v-if="onSplashScreen">
-      <Button id="new-game-button" @click="beginSetup()" @keyup.enter="beginSetup()" label="New Game" />
-    </section>
-    <section v-if="inSetupMode">
-      <GameSetup @init-game="initGame" />
-    </section>
-    <JumboTron v-if="newGameData" :new-game-data="newGameData" />
+    <Button 
+      id="new-game-button" 
+      @click="playGame()"
+      @keyup.enter="playGame()" 
+      label="New Game" 
+    ></Button>
   </main>
 </template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { JumboTron, GameSetup } from "../components";
-import type { initGameData } from "../types/genericTypes";
-import type { GameRecord } from "../types/game";
-import { Game } from "../types/game";
 import Button from "primevue/button";
+import { useRouter } from "vue-router";
 
-const onSplashScreen = ref<boolean>(true);
-const inSetupMode = ref<boolean>(false);
+const router = useRouter();
 
-const newGameData = ref<GameRecord>();
-
-function beginSetup() {
-  onSplashScreen.value = false;
-  inSetupMode.value = true;
-}
-
-function initGame(payload: initGameData) {
-  console.log('Creating Game...');
-  newGameData.value = new Game(payload.playerOne, payload.playerTwo);
-  inSetupMode.value = false;
+function playGame() {
+  router.push({ name: 'Play' });
 }
 
 function handleKeyPress(event: any) {
-  if (event.key === 'Enter' && onSplashScreen.value) {
-    beginSetup();
+  if (event.key === 'Enter') {
+    playGame();
   }
 }
 
@@ -55,6 +42,8 @@ onUnmounted(() => {
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #splash {
@@ -72,6 +61,7 @@ onUnmounted(() => {
   background-color: rgb(6, 6, 31);
   transition: filter 1s ease;
   padding: 20px 40px;
+  max-width: max-content;
 }
 
 #new-game-button:hover {

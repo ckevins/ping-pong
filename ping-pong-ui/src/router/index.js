@@ -1,5 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import PlayGame from "../views/PlayGame.vue";
+import StatsByGame from "../views/StatsByGame.vue";
+import StatsByPlayer from "../views/StatsByPlayer.vue";
 import GameReport from "../views/GameReport.vue";
 
 const router = createRouter({
@@ -7,13 +10,33 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "Home",
       component: HomeView,
     },
     {
-      path: "/game-report/:id",
-      name: "Game Report",
-      component: GameReport,
+      path: "/play",
+      name: "Play",
+      component: PlayGame,
+    },
+    {
+      path: "/stats",
+      children: [
+        {
+          path: "/by-game",
+          name: "Stats by Game",
+          component: StatsByGame,
+        },
+        {
+          path: "/game-report/:id",
+          name: "Game Report",
+          component: GameReport,
+        },
+        {
+          path: "/by-player",
+          name: "Stats by Player",
+          component: StatsByPlayer
+        }
+      ]
     }
   ],
 });

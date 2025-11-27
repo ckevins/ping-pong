@@ -3,44 +3,36 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+
+
 const items = ref([
     {
         label: 'Home',
-        icon: 'pi pi-home'
+        icon: 'pi pi-home',
+        command: () => router.push({ name: 'Home' })
     },
     {
         label: 'Play',
-        icon: 'pi pi-star'
+        icon: 'pi pi-play',
+        command: () => router.push({ name: 'Play' })
     },
     {
         label: 'Stats',
-        icon: 'pi pi-search',
+        icon: 'pi pi-trophy',
         items: [
             {
-                label: 'Components',
-                icon: 'pi pi-bolt'
+                label: 'By Game',
+                icon: 'pi pi-book',
+                command: () => router.push({ name: 'Stats by Game' })
             },
             {
-                label: 'Blocks',
-                icon: 'pi pi-server'
-            },
-            {
-                label: 'UI Kit',
-                icon: 'pi pi-pencil'
-            },
-            {
-                label: 'Templates',
-                icon: 'pi pi-palette',
-                items: [
-                    {
-                        label: 'Apollo',
-                        icon: 'pi pi-palette'
-                    },
-                    {
-                        label: 'Ultima',
-                        icon: 'pi pi-palette'
-                    }
-                ]
+                label: 'By Player',
+                icon: 'pi pi-user',
+                command: () => router.push({ name: 'Stats by Player' })
             }
         ]
     }
