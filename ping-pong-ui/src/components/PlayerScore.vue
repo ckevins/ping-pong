@@ -2,8 +2,8 @@
   <div class="text-center jumbo-tron__half">
     <section class="player-name-section">
       <p id="player-name">{{ props.player.name }}
-        <span class="win-loss-record">({{ props.player.wins || 0 }} - {{ props.player.losses || 0 }})</span>
       </p>
+      <span class="win-loss-record">({{ props.player.wins || 0 }} - {{ props.player.losses || 0 }})</span>
       <div :class="props.playerPosition === 1 ? 'serving-indicator player-one' : 'serving-indicator player-two'">
         <PaddleIcon :class="props.isServing && !props.isFinalScore ? '' : 'invisible'" />
         <p :class="props.hasAdvantage ? '' : 'invisible'" id="advantage">Adv.</p>
@@ -12,7 +12,7 @@
     <div>
       <p id="jumbo-tron__score">{{ props.score }}</p>
     </div>
-    <div :class="props.isFinalScore ? 'invisible' : ''" role="button" class="jumbo-tron__button" @click="emit('update-score')">+</div>
+    <div v-if="!props.hideScoreButton" :class="props.isFinalScore ? 'invisible' : ''" role="button" class="jumbo-tron__button" @click="emit('update-score')">+</div>
   </div>
 </template>
 
@@ -27,12 +27,14 @@ const props = withDefaults(defineProps<{
   isFinalScore?: boolean;
   hasAdvantage?: boolean;
   playerPosition?: number;
+  hideScoreButton?: boolean;
 }>(), {
   score: 0,
   isServing: false,
   isFinalScore: false,
   hasAdvantage: false,
   playerPosition: 1,
+  hideScoreButton: false
 });
 
 const emit = defineEmits(["update-score"]);
@@ -41,7 +43,7 @@ const emit = defineEmits(["update-score"]);
 <style scoped>
 .jumbo-tron__half {
   flex-grow: 1;
-  max-width: 48%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -60,6 +62,8 @@ const emit = defineEmits(["update-score"]);
 
 #player-name {
   font-size: 30px;
+  white-space: nowrap;
+  text-align: center;
 }
 
 .serving-indicator {

@@ -237,23 +237,24 @@ onUnmounted(() => {
 <style>
 .jumbo-tron-container, .chart-container {
   text-align: center;
-  height: calc(50vh - 20px);
+  height: calc(50vh - 60px);
 }
 
 .jumbo-tron-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   font-family: "Doto";
+  gap: 10px;
 }
 
 #jumbo-tron {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   position: relative;
   height: 280px;
   width: 100%;
+  grid-template-columns: 1fr 10px 1fr;
 }
 
 .divider-section {

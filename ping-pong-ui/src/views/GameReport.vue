@@ -5,9 +5,9 @@
     </header>
     <main>
       <div id="score-section">
-        <GameReportPlayerSide :player="gameData.playerOne" :score="gameData?.points?.slice(-1)[0]?.playerOneScore ?? 0" />
+        <GameReportPlayerSide :player-position="1" :player="gameData.playerOne" :score="gameData?.points?.slice(-1)[0]?.playerOneScore ?? 0" :point-data="gameData.points" />
         <Divider layout="vertical"><b>VS</b></Divider>
-        <GameReportPlayerSide :player="gameData.playerTwo" :score="gameData?.points?.slice(-1)[0]?.playerTwoScore ?? 0" />
+        <GameReportPlayerSide :player-position="2" :player="gameData.playerTwo" :score="gameData?.points?.slice(-1)[0]?.playerTwoScore ?? 0" :point-data="gameData.points" />
       </div>
       <Divider />
       <section id="game-details">
@@ -60,7 +60,15 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 header {
-  margin: 20px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  margin: 0;
+  max-height: 50px;
 }
 
 #game-report {
@@ -75,17 +83,22 @@ h3 {
   text-align: center;
 }
 
+main {
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  max-height: calc(100vh - 120px);
+}
+
 #score-section {
   display: grid;
   grid-template-columns: 1fr 10px 1fr;
   text-align: center;
   font-family: "Doto";
-  min-height: 30vh;
+  max-width: 100vw;
 }
 
 #game-details {
   display: flex;
-  height: 35vh;
 }
 
 #game-details__right {

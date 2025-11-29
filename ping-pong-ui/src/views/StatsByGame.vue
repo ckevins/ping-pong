@@ -88,7 +88,10 @@ onMounted(async () => {
 });
 </script>
 
-<style>
-
-
+<style scoped>
+:deep(.p-row-even:hover), 
+:deep(.p-row-odd:hover) {
+    cursor: pointer;
+    background-color: rgb(43, 43, 43) !important;
+}
 </style>
