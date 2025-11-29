@@ -29,32 +29,47 @@
           </div>
         </template>
         
-        <Column field="name" header="Name" sortable></Column>
+        <Column field="name" header="Name" sortable style="min-width: 150px"></Column>
         <Column field="wins" header="Wins" sortable></Column>
         <Column field="losses" header="Losses" sortable></Column>
-        <Column field="winningPct" header="Winning %" sortable>
+        <Column field="winningPct" header="Winning %" sortable style="min-width: 150px">
           <template #body="{ data }">
               {{ data.winningPct || data.winningPct === 0 ? formatPercentage(data.winningPct) : '-' }}
           </template>
         </Column>
-        <Column field="gamesPlayed" header="GP" sortable>
+        <Column field="gamesPlayed" header="GP" sortable style="min-width: 50px">
           <template #body="{ data }">
               {{ data.gamesPlayed || '-' }}
           </template>
         </Column>
-        <Column field="pointsPlayed" header="Points Played" sortable>
+        <Column field="pointsPlayed" header="Points Played" sortable style="min-width: 150px">
           <template #body="{ data }">
               {{ data.pointsPlayed || '-' }}
           </template>
         </Column>
-        <Column field="pointsWon" header="Points Won" sortable>
+        <Column field="pointsWon" header="Points Won" sortable style="min-width: 150px">
           <template #body="{ data }">
               {{ data.pointsWon || '-' }}
           </template>
         </Column>
-        <Column field="pointWinPct" header="Point Win %" sortable>
+        <Column field="pointWinPct" header="Point Win %" sortable style="min-width: 150px">
           <template #body="{ data }">
             {{ data.pointWinPct || data.pointWinPct === 0 ? formatPercentage(data.pointWinPct) : '-' }}
+          </template>
+        </Column>
+        <Column field="serves" header="Serves" sortable style="min-width: 100px">
+          <template #body="{ data }">
+              {{ data.serves || '-' }}
+          </template>
+        </Column>
+        <Column field="servesWon" header="Serves Won" sortable style="min-width: 150px">
+          <template #body="{ data }">
+              {{ data.servesWon || '-' }}
+          </template>
+        </Column>
+        <Column field="serveWinPct" header="Serve Win %" sortable style="min-width: 150px">
+          <template #body="{ data }">
+            {{ data.serveWinPct || data.serveWinPct === 0 ? formatPercentage(data.pointWinPct) : '-' }}
           </template>
         </Column>
       </DataTable>
