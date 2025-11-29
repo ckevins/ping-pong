@@ -1,6 +1,6 @@
 
 <template>
-    <Chart type="pie" :data="chartData" :options="chartOptions" />
+    <Chart id="blah" type="pie" :data="chartData" :options="chartOptions" />
 </template>
 
 <script setup>
@@ -51,3 +51,9 @@ const setChartOptions = () => {
     };
 };
 </script>
+
+<style scoped>
+#blah {
+    max-height: 200px;
+}
+</style>

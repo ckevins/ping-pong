@@ -8,14 +8,14 @@
       :hide-score-button="true"
     />
     <div class="pie-chart-container">
-      <p class="chart-label">Serves: {{ props.player.numberOfServes }}</p>
+      <p class="custom-chart-label">Serves: {{ props.player.numberOfServes }}</p>
       <PieChart 
         :chart-data="[props.player.numberOfServesWon, props.player.numberOfServes - props.player.numberOfServesWon]" 
         :chart-labels="['Won', 'Lost']" 
       />
     </div>
     <div class="pie-chart-container">
-      <p class="chart-label">Lead Possession</p>
+      <p class="custom-chart-label">Lead Possession</p>
       <PieChart 
         :chart-data="leadPossessionChartData"
         :chart-labels="['Lead', 'Tied', 'Losing']"
@@ -77,11 +77,7 @@ const leadPossessionChartData = computed(() => {
   text-align: center;
 }
 
-.pie-chart-container {
-  max-width: 50%;
-}
-
-.chart-label {
+.custom-chart-label {
   padding-bottom: 10px;
 }
 </style>
