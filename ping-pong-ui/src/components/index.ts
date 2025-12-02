@@ -8,3 +8,4 @@ export { default as GameLineChart } from "./GameLineChart.vue";
 export { default as PieChart } from "./PieChart.vue";
 export { default as GameReportPlayerSide } from "./GameReportPlayerSide.vue";
 export { default as Navbar} from "./NavBar.vue";
+export { default as NewPlayerDialog } from "./NewPlayerDialog.vue";

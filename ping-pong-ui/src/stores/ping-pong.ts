@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const usePingPongStore = defineStore('ping-pong', () => {
-  const useTestUsers = ref(true)
+  const useTestUsers = ref(false)
 
   const fetchPlayers = async (useTestUsers: boolean) => {
     try {

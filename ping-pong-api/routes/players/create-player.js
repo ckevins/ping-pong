@@ -8,11 +8,12 @@ async function createPlayer (req, res) {
   const player = {
     name: req.body.name,
     handedness: req.body.handedness,
+    isTestUser: req.body.isTestUser ? 1 : 0
   };
 
   const insertPlayerSql = `
     INSERT INTO main.players ("name", "handedness", "isTestUser")
-    VALUES ("${player.name}", "${player.handedness}", 0);
+    VALUES ("${player.name}", "${player.handedness}", ${player.isTestUser});
   `;
 
   await executeQueryAsync(insertPlayerSql);
