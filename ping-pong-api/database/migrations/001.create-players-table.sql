@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS "players" (
+"id"	INTEGER NOT NULL UNIQUE,
+"name"	TEXT,
+"handedness"	TEXT,
+"isTestUser" INTEGER NOT NULL,
+PRIMARY KEY("id" AUTOINCREMENT)
+);

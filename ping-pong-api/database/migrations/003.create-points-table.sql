@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS "points" (
+"id"	INTEGER NOT NULL UNIQUE,
+"gameId"	INTEGER NOT NULL,
+"pointNumber"	INTEGER NOT NULL,
+"servingPlayer"	INTEGER NOT NULL,
+"pointWinner"	INTEGER NOT NULL,
+"playerOneScore"	INTEGER NOT NULL,
+"playerTwoScore"	INTEGER NOT NULL,
+PRIMARY KEY("id" AUTOINCREMENT),
+FOREIGN KEY("gameId") REFERENCES "games"("id")
+);

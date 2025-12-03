@@ -1,9 +1,10 @@
-const { readQueryFile, executeQueryAsync } = require("../../../database/query-helpers");
+const { executeQueryAsync } = require("../../../database/query-helpers");
+const { readFile } = require("../../../database/read-file");
 
 async function getPlayers (res) {
   console.log("Fetching players...");
-  
-  const sql = readQueryFile('../routes/players/get-players/get-players.sql');
+
+  const sql = readFile('../routes/players/get-players/get-players.sql');
   const playerData = await executeQueryAsync(sql);
   res.json({ data: playerData });
 }
