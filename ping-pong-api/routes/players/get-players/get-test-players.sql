@@ -1,9 +1,3 @@
-const db = require("../../database/database");
-const { executeQueryAsync } = require("../../database/query-helpers");
-
-async function getPlayers (req, res) {
-  console.log("Fetching players...");
-  const sql = `
 SELECT  
   p.id,
   p.name,
@@ -86,14 +80,3 @@ FROM Players p
   ) stats 
   ON p.id = stats.id
 WHERE isTestUser = 1;
-  `;
-  db.all(sql, [], (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json({ data: rows });
-  });
-}
-
-module.exports = getPlayers;

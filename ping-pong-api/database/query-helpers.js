@@ -19,7 +19,21 @@ async function executeQueryAsync (query, parameters = []) {
   })
 }
 
+async function executeMultiQueryAsync (queries) {
+  db.serialize(() => {
+    queries.forEach((query) => {
+      db.all(query, (err, rows) => {
+        if (err) {
+          console.error(err.message);
+          return;
+        }
+      });
+    });
+  });
+}
+
 module.exports = {
   readQueryFile,
-  executeQueryAsync
+  executeQueryAsync,
+  executeMultiQueryAsync
 }

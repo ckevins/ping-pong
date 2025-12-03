@@ -16,11 +16,9 @@ app.use((req, res, next) => {
 
 const playersRouter = require('./routes/players/players-router');
 const gamesRouter = require('./routes/games/games-router');
-const migrationsRouter = require('./routes/migrations');
 
 app.use('/api', playersRouter);
 app.use('/api', gamesRouter);
-app.use('/api', migrationsRouter)
 
 // Start the server
 app.listen(port, () => {

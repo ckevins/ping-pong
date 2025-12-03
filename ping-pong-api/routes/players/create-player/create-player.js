@@ -1,9 +1,7 @@
-const db = require("../../database/database");
-const { executeQueryAsync } = require("../../database/query-helpers");
+const { executeQueryAsync } = require("../../../database/query-helpers");
 
 async function createPlayer (req, res) {
-  console.log("Creating player...");
-  console.log("Player:", req.body);
+  console.log("Creating player:", req.body);
 
   const player = {
     name: req.body.name,
