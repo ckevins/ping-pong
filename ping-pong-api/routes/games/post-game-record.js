@@ -1,5 +1,5 @@
-const db = require("../../database");
-const { executeQueryAsync } = require("../../query-helpers");
+const db = require("../../database/database");
+const { executeQueryAsync } = require("../../database/query-helpers");
 
 async function postGameRecord (req, res) {
   console.log("Saving game record...");

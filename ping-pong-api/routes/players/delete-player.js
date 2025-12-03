@@ -1,5 +1,5 @@
-const db = require("../../database");
-const { executeQueryAsync } = require("../../query-helpers");
+const db = require("../../database/database");
+const { executeQueryAsync } = require("../../database/query-helpers");
 
 async function deletePlayer (playerId, res) {
   console.log("Deleting player...");

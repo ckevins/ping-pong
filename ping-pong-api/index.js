@@ -1,6 +1,5 @@
 // index.js
 const express = require('express');
-const db = require('./database');
     
 const app = express();
 const port = 3000; // Or any desired port
@@ -15,11 +14,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// Move API routes to separate router files in ./routes
 const playersRouter = require('./routes/players/players-router');
 const gamesRouter = require('./routes/games/games-router');
 const migrationsRouter = require('./routes/migrations');
-// mount the players router at /api
+
 app.use('/api', playersRouter);
 app.use('/api', gamesRouter);
 app.use('/api', migrationsRouter)

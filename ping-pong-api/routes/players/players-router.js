@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
 
-const getPlayers = require('./get-players.js');
+const getPlayers = require('./get-players/get-players.js');
 const getTestPlayers = require('./get-test-players.js');
 const createPlayer = require('./create-player.js');
 const deletePlayer = require('./delete-player.js');
 
 router.route('/players')
-  .get(async (req, res) => {
-    await getPlayers(req, res);
+  .get(async (_, res) => {
+    await getPlayers(res);
   })
   .post(async (req, res) => {
     await createPlayer(req, res);

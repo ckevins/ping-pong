@@ -1,4 +1,10 @@
 const db = require("./database");
+const fs = require('fs');
+const path = require('path');
+
+function readQueryFile (filename) {
+  return fs.readFileSync(path.join(__dirname, filename), 'utf8');
+}
 
 async function executeQueryAsync (query, parameters = []) {
   return new Promise((resolve, reject) => {
@@ -14,5 +20,6 @@ async function executeQueryAsync (query, parameters = []) {
 }
 
 module.exports = {
+  readQueryFile,
   executeQueryAsync
 }
