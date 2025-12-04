@@ -33,50 +33,39 @@ FROM Players p
   ON p.id = l.playerId
   LEFT JOIN (
     SELECT
-      p.id,
-      COUNT(DISTINCT g.id) AS gamesPlayed,
-      COUNT(po.id) AS pointsPlayed,
-      COUNT(
-        CASE
-          WHEN po.pointWinner = p.id THEN 1
-          ELSE NULL
-        END
-      ) AS pointsWon,
-      ROUND(CAST(COUNT(
-        CASE
-          WHEN po.pointWinner = p.id THEN 1
-          ELSE NULL
-        END
-      ) AS FLOAT)/COUNT(po.id), 3) AS pointWinPct,
-      COUNT(
-        CASE
-          WHEN po.servingPlayer = p.id THEN 1
-          ELSE NULL
-        END
-      ) AS serves,
-      COUNT(
-        CASE
-          WHEN po.servingPlayer = p.id AND po.pointWinner = p.id THEN 1
-          ELSE NULL
-        END
-      ) AS servesWon,
-      ROUND(CAST(COUNT(
-        CASE
-          WHEN po.servingPlayer = p.id AND po.pointWinner = p.id THEN 1
-          ELSE NULL
-        END
-      ) AS FLOAT)/COUNT(
-        CASE
-          WHEN po.servingPlayer = p.id THEN 1
-          ELSE NULL
-        END
-      ), 3) AS serveWinPct
-    FROM players p 
-    JOIN games g 
-      ON p.id = g.playerOneId OR p.id = g.playerTwoId
-    JOIN points po 
-      ON g.id = po.gameId
-    GROUP BY p.id
+      statCounts.*,
+      ROUND(CAST(statCounts.pointsWon AS FLOAT)/statCounts.pointsPlayed, 3) AS pointWinPct,
+      ROUND(CAST(statCounts.servesWon AS FLOAT)/statCounts.serves, 3) AS serveWinPct
+    FROM (
+      SELECT
+        p.id,
+        COUNT(DISTINCT g.id) AS gamesPlayed,
+        COUNT(po.id) AS pointsPlayed,
+        COUNT(
+          CASE
+            WHEN po.pointWinner = p.id THEN 1
+            ELSE NULL
+          END
+        ) AS pointsWon,
+        COUNT(
+          CASE
+            WHEN po.servingPlayer = p.id THEN 1
+            ELSE NULL
+          END
+        ) AS serves,
+        COUNT(
+          CASE
+            WHEN po.servingPlayer = p.id AND po.pointWinner = p.id THEN 1
+            ELSE NULL
+          END
+        ) AS servesWon
+      FROM players p 
+      JOIN games g 
+        ON p.id = g.playerOneId OR p.id = g.playerTwoId
+      JOIN points po 
+        ON g.id = po.gameId
+      GROUP BY p.id
+    ) statCounts
   ) stats 
   ON p.id = stats.id
 WHERE isTestUser = 0;

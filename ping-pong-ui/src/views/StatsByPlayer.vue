@@ -69,7 +69,7 @@
         </Column>
         <Column field="serveWinPct" header="Serve Win %" sortable style="min-width: 150px">
           <template #body="{ data }">
-            {{ data.serveWinPct || data.serveWinPct === 0 ? formatPercentage(data.pointWinPct) : '-' }}
+            {{ data.serveWinPct || data.serveWinPct === 0 ? formatPercentage(data.serveWinPct) : '-' }}
           </template>
         </Column>
       </DataTable>
