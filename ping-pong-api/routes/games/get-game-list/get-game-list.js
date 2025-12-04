@@ -1,8 +1,7 @@
-const db = require("../../database/database");
-const { executeQueryAsync } = require("../../database/query-helpers");
+const { executeQueryAsync } = require("../../../database/query-helpers");
 
-async function getGamesList (req, res) {
-  console.log("Fetching game records..");
+async function getGamesList (res) {
+  console.log("Fetching all game records..");
 
   const getGameDataSql = `
     SELECT
